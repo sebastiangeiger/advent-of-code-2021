@@ -23,6 +23,7 @@ func main() {
 			runDayProblem(day, problem)
 		}
 	}
+
 }
 
 func printHelp() {
@@ -61,7 +62,22 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Please implement!")
+	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	fmt.Printf("Increases (test): %d\n", countStepIncreases(slidingAverages(testInput, 3)))
+	input := readIntsFrom("day_1.input")
+	fmt.Printf("Increases (real): %d\n", countStepIncreases(slidingAverages(input, 3)))
+}
+
+func slidingAverages(measurements []int, window int) []int {
+	result := []int{}
+	for i := 0; i <= len(measurements)-window; i++ {
+		average := 0
+		for j := 0; j < window; j++ {
+			average += measurements[i+j]
+		}
+		result = append(result, average)
+	}
+	return result
 }
 
 func countStepIncreases(measurements []int) int {
