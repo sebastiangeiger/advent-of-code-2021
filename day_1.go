@@ -1,10 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 func main() {
 	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
-	fmt.Printf("Increases: %d\n", countStepIncreases(testInput))
+	fmt.Printf("Increases (test): %d\n", countStepIncreases(testInput))
+	input := readIntsFrom("day_1.input")
+	fmt.Printf("Increases (real): %d\n", countStepIncreases(input))
 }
 
 func countStepIncreases(measurements []int) int {
@@ -17,4 +24,24 @@ func countStepIncreases(measurements []int) int {
 		previousMeasurement = measurement
 	}
 	return increases
+}
+
+func readIntsFrom(path string) []int {
+	data, fileError := os.ReadFile(path)
+	if fileError != nil {
+		panic(fileError)
+	}
+	lines := strings.Split(string(data), "\n")
+	integers := []int{}
+	for _, line := range lines {
+		if line != "" {
+			integer, err := strconv.Atoi(line)
+			if err == nil {
+				integers = append(integers, integer)
+			} else {
+				panic(err)
+			}
+		}
+	}
+	return integers
 }
