@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strconv"
-	"strings"
 )
 
 func runDay1(problem int) {
@@ -57,11 +55,7 @@ func countStepIncreases(measurements []int) int {
 }
 
 func readIntsFrom(path string) []int {
-	data, fileError := os.ReadFile(path)
-	if fileError != nil {
-		panic(fileError)
-	}
-	lines := strings.Split(string(data), "\n")
+	lines := readLinesFrom(path)
 	integers := []int{}
 	for _, line := range lines {
 		if line != "" {
