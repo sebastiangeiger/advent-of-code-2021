@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/sebastiangeiger/advent-of-code-2021/common"
+	"github.com/sebastiangeiger/advent-of-code-2021/day_1"
+	"github.com/sebastiangeiger/advent-of-code-2021/day_2"
 )
 
 func main() {
@@ -30,18 +34,13 @@ func printHelp() {
 	os.Exit(1)
 }
 
-func printNotImplemented(day int, problem int) {
-	fmt.Printf("Day %d - problem %d is not implemented yet", day, problem)
-	os.Exit(1)
-}
-
 func runDayProblem(day int, problem int) {
 	switch day {
 	case 1:
-		runDay1(problem)
+		day_1.Run(problem)
 	case 2:
-		runDay2(problem)
+		day_2.Run(problem)
 	default:
-		printNotImplemented(day, problem)
+		common.PrintNotImplemented(day, problem)
 	}
 }

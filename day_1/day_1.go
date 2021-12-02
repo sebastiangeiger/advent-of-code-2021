@@ -1,4 +1,4 @@
-package main
+package day_1
 
 import (
 	"fmt"
@@ -7,25 +7,25 @@ import (
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
 
-func runDay1(problem int) {
+func Run(problem int) {
 	switch problem {
 	case 1:
-		day1problem1()
+		problem1()
 	case 2:
-		day1problem2()
+		problem2()
 	default:
-		printNotImplemented(1, problem)
+		common.PrintNotImplemented(1, problem)
 	}
 }
 
-func day1problem1() {
+func problem1() {
 	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
 	fmt.Printf("Increases (test): %d\n", countStepIncreases(testInput))
 	input := readIntsFrom("day_1.input")
 	fmt.Printf("Increases (real): %d\n", countStepIncreases(input))
 }
 
-func day1problem2() {
+func problem2() {
 	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
 	fmt.Printf("Increases (test): %d\n", countStepIncreases(slidingAverages(testInput, 3)))
 	input := readIntsFrom("day_1.input")

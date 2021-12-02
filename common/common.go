@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
@@ -17,4 +18,9 @@ func ReadLinesFrom(path string) []string {
 		}
 	}
 	return lines
+}
+
+func PrintNotImplemented(day int, problem int) {
+	fmt.Printf("Day %d - problem %d is not implemented yet", day, problem)
+	os.Exit(1)
 }
