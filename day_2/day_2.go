@@ -1,37 +1,39 @@
-package main
+package day_2
 
 import (
 	"fmt"
 	"regexp"
 	"strconv"
+
+	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
 
-func runDay2(problem int) {
+func Run(problem int) {
 	switch problem {
 	case 1:
-		day2problem1()
+		problem1()
 	case 2:
-		day2problem2()
+		problem2()
 	default:
-		printNotImplemented(2, problem)
+		common.PrintNotImplemented(2, problem)
 	}
 }
 
-func day2problem1() {
+func problem1() {
 	testPosition := Position{0, 0}
-	testPosition.ApplyNavigationSteps(readLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := Position{0, 0}
-	realPosition.ApplyNavigationSteps(readLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 
-func day2problem2() {
+func problem2() {
 	testPosition := PositionWithAim{0, 0, 0}
-	testPosition.ApplyNavigationSteps(readLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := PositionWithAim{0, 0, 0}
-	realPosition.ApplyNavigationSteps(readLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 
