@@ -9,12 +9,12 @@ func runDay2(problem int) {
 	case 2:
 		day2problem2()
 	default:
-		printNotImplemented(1, problem)
+		printNotImplemented(2, problem)
 	}
 }
 
 func day2problem1() {
-	fmt.Printf("Implement me!\n")
+	fmt.Printf("%#v\n", readLinesFrom("day2_test.input"))
 }
 
 func day2problem2() {

@@ -58,13 +58,11 @@ func readIntsFrom(path string) []int {
 	lines := readLinesFrom(path)
 	integers := []int{}
 	for _, line := range lines {
-		if line != "" {
-			integer, err := strconv.Atoi(line)
-			if err == nil {
-				integers = append(integers, integer)
-			} else {
-				panic(err)
-			}
+		integer, err := strconv.Atoi(line)
+		if err == nil {
+			integers = append(integers, integer)
+		} else {
+			panic(err)
 		}
 	}
 	return integers
