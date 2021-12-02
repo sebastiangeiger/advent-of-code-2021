@@ -19,14 +19,14 @@ func Run(problem int) {
 }
 
 func problem1() {
-	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	testInput := readIntsFrom("day_1_test.input")
 	fmt.Printf("Increases (test): %d\n", countStepIncreases(testInput))
 	input := readIntsFrom("day_1.input")
 	fmt.Printf("Increases (real): %d\n", countStepIncreases(input))
 }
 
 func problem2() {
-	testInput := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	testInput := readIntsFrom("day_1_test.input")
 	fmt.Printf("Increases (test): %d\n", countStepIncreases(slidingAverages(testInput, 3)))
 	input := readIntsFrom("day_1.input")
 	fmt.Printf("Increases (real): %d\n", countStepIncreases(slidingAverages(input, 3)))
