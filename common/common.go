@@ -3,11 +3,12 @@ package common
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 func ReadLinesFrom(path string) []string {
-	data, fileError := os.ReadFile(path)
+	data, fileError := os.ReadFile(filepath.Join("inputs", path))
 	if fileError != nil {
 		panic(fileError)
 	}
