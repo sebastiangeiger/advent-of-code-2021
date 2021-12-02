@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+
+	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
 
 func runDay2(problem int) {
@@ -19,19 +21,19 @@ func runDay2(problem int) {
 
 func day2problem1() {
 	testPosition := Position{0, 0}
-	testPosition.ApplyNavigationSteps(readLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := Position{0, 0}
-	realPosition.ApplyNavigationSteps(readLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 
 func day2problem2() {
 	testPosition := PositionWithAim{0, 0, 0}
-	testPosition.ApplyNavigationSteps(readLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := PositionWithAim{0, 0, 0}
-	realPosition.ApplyNavigationSteps(readLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 

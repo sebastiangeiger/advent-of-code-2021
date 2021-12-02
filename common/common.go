@@ -1,11 +1,11 @@
-package main
+package common
 
 import (
 	"os"
 	"strings"
 )
 
-func readLinesFrom(path string) []string {
+func ReadLinesFrom(path string) []string {
 	data, fileError := os.ReadFile(path)
 	if fileError != nil {
 		panic(fileError)

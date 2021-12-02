@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
 
 func runDay1(problem int) {
@@ -55,7 +57,7 @@ func countStepIncreases(measurements []int) int {
 }
 
 func readIntsFrom(path string) []int {
-	lines := readLinesFrom(path)
+	lines := common.ReadLinesFrom(path)
 	integers := []int{}
 	for _, line := range lines {
 		integer, err := strconv.Atoi(line)
