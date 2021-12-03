@@ -20,19 +20,21 @@ func Run(problem int) {
 }
 
 func problem1() {
-	solveProblem1("day_3_test.input")
+	fmt.Printf("Power (test): %d", solveProblem1("day_3_test.input"))
 }
 
 func problem2() {
 	fmt.Printf("Implement me!\n")
 }
 
-func solveProblem1(path string) {
+func solveProblem1(path string) int {
 	lines := common.ReadLinesFrom(path)
 	pivoted := pivot(toIntMatrix(lines))
 	gamma := calculateGamma(pivoted)
-	fmt.Printf("pivoted: %#v\n", pivoted)
+	epsilon := complement(gamma)
 	fmt.Printf("gamma: %#v\n", makeBase10(gamma))
+	fmt.Printf("epsilon: %#v\n", makeBase10(epsilon))
+	return makeBase10(gamma) * makeBase10(epsilon)
 }
 
 func calculateGamma(input [][]int) []int {
@@ -47,6 +49,20 @@ func calculateGamma(input [][]int) []int {
 			majority = 1
 		}
 		output[i] = majority
+	}
+	return output
+}
+
+func complement(input []int) []int {
+	output := make([]int, len(input))
+	for i, number := range input {
+		if number == 0 {
+			output[i] = 1
+		} else if number == 1 {
+			output[i] = 0
+		} else {
+			panic("Number was not 0 or 1")
+		}
 	}
 	return output
 }
