@@ -28,17 +28,21 @@ func problem2() {
 
 func solveProblem1(path string) {
 	lines := common.ReadLinesFrom(path)
-	pivoted := toIntArrays(lines)
+	pivoted := pivot(toIntMatrix(lines))
 	fmt.Printf("%#v\n", pivoted)
 }
 
-func toIntArrays(lines []string) [][]int {
+func toIntMatrix(lines []string) [][]int {
 	dx := len(lines)
 	dy := len(lines[0])
 	result := initializeArray(dx, dy)
 	for x := 0; x < dx; x++ {
+		currentLine := lines[x]
+		if len(currentLine) != dy {
+			panic(fmt.Sprintf("Expected lines[%d] to be %d long but was %d", x, dy, len(currentLine)))
+		}
 		for y := 0; y < dy; y++ {
-			number, err := strconv.Atoi(string(lines[x][y]))
+			number, err := strconv.Atoi(string(currentLine[y]))
 			if err == nil {
 				result[x][y] = number
 			} else {
@@ -47,6 +51,18 @@ func toIntArrays(lines []string) [][]int {
 		}
 	}
 	return result
+}
+
+func pivot(input [][]int) [][]int {
+	dx := len(input[0])
+	dy := len(input)
+	output := initializeArray(dx, dy)
+	for x := 0; x < dx; x++ {
+		for y := 0; y < dy; y++ {
+			output[x][y] = input[y][x]
+		}
+	}
+	return output
 }
 
 func initializeArray(dx int, dy int) [][]int {
