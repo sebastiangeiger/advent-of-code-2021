@@ -25,7 +25,7 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Printf("Implement me!\n")
+	solveProblem2("day_3_test.input")
 }
 
 func solveProblem1(path string) int {
@@ -36,6 +36,50 @@ func solveProblem1(path string) int {
 	fmt.Printf("gamma: %#v\n", makeBase10(gamma))
 	fmt.Printf("epsilon: %#v\n", makeBase10(epsilon))
 	return makeBase10(gamma) * makeBase10(epsilon)
+}
+
+func solveProblem2(path string) {
+	lines := common.ReadLinesFrom(path)
+	matrix := toIntMatrix(lines)
+	oxygenGeneratorRating := calculateOxygenGeneratorRating(matrix)
+	fmt.Printf("oxygenGeneratorRating: %#v\n", oxygenGeneratorRating)
+}
+
+func calculateOxygenGeneratorRating(input [][]int) []int {
+	pivoted := pivot(input)
+	for bitCriteriaIndex := 0; bitCriteriaIndex < len(pivoted); bitCriteriaIndex++ {
+		mostCommonValue := mostCommonValue(pivoted[bitCriteriaIndex])
+		fmt.Printf("Most common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], mostCommonValue)
+	}
+	output := input[0]
+	return output
+}
+
+func sum(input []int) int {
+	sum := 0
+	for _, number := range input {
+		sum += number
+	}
+	return sum
+}
+
+func mostCommonValue(input []int) int {
+	sum := sum(input)
+	isEvenNumberItems := (len(input)%2 == 0)
+	if isEvenNumberItems {
+		if sum >= len(input)/2 {
+			return 1
+		} else {
+			return 0
+		}
+	} else {
+		// odd -> 7/2 = 3 meaning you need 4 items to be 1 for 1 to be most common
+		if sum >= (len(input)/2)+1 {
+			return 1
+		} else {
+			return 0
+		}
+	}
 }
 
 func calculateGamma(input [][]int) []int {
