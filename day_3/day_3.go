@@ -20,7 +20,8 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("Power (test): %d", solveProblem1("day_3_test.input"))
+	fmt.Printf("Power (test): %d\n", solveProblem1("day_3_test.input"))
+	fmt.Printf("Power (real): %d\n", solveProblem1("day_3.input"))
 }
 
 func problem2() {
