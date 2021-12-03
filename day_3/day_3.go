@@ -49,18 +49,16 @@ func solveProblem2(path string) int {
 	return makeBase10(oxygenGeneratorRating) * makeBase10(scrubberRating)
 }
 
-func calculateOxygenGeneratorRating(candidates [][]int) []int {
+func bitCriteriaFilter(candidates [][]int, desiredValue func([]int) int) []int {
 	for bitCriteriaIndex := 0; bitCriteriaIndex < len(candidates[0]); bitCriteriaIndex++ {
-		pivoted := pivot(candidates)
-		mostCommonValue := mostCommonValue(pivoted[bitCriteriaIndex])
+		bitsAtIndex := pivot(candidates)[bitCriteriaIndex]
+		desiredValue := desiredValue(bitsAtIndex)
 		newCandidates := [][]int{}
 		for _, candidate := range candidates {
-			if candidate[bitCriteriaIndex] == mostCommonValue {
+			if candidate[bitCriteriaIndex] == desiredValue {
 				newCandidates = append(newCandidates, candidate)
 			}
 		}
-		// fmt.Printf("Most common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], mostCommonValue)
-		// fmt.Printf("  %#v\ngot reduced to \n  %#v\n", candidates, newCandidates)
 		if len(newCandidates) == 1 {
 			return newCandidates[0]
 		} else {
@@ -70,25 +68,12 @@ func calculateOxygenGeneratorRating(candidates [][]int) []int {
 	panic("I shouldn't get here")
 }
 
+func calculateOxygenGeneratorRating(candidates [][]int) []int {
+	return bitCriteriaFilter(candidates, mostCommonValue)
+}
+
 func calculateScrubberRating(candidates [][]int) []int {
-	for bitCriteriaIndex := 0; bitCriteriaIndex < len(candidates[0]); bitCriteriaIndex++ {
-		pivoted := pivot(candidates)
-		leastCommonValue := leastCommonValue(pivoted[bitCriteriaIndex])
-		newCandidates := [][]int{}
-		for _, candidate := range candidates {
-			if candidate[bitCriteriaIndex] == leastCommonValue {
-				newCandidates = append(newCandidates, candidate)
-			}
-		}
-		// fmt.Printf("Least common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], leastCommonValue)
-		// fmt.Printf("  %#v\ngot reduced to \n  %#v\n", candidates, newCandidates)
-		if len(newCandidates) == 1 {
-			return newCandidates[0]
-		} else {
-			candidates = newCandidates
-		}
-	}
-	panic("I shouldn't get here")
+	return bitCriteriaFilter(candidates, leastCommonValue)
 }
 
 func sum(input []int) int {
@@ -118,27 +103,24 @@ func mostCommonValue(input []int) int {
 	}
 }
 
-func leastCommonValue(input []int) int {
-	mostCommonValue := mostCommonValue(input)
-	if mostCommonValue == 0 {
+func not(input int) int {
+	if input == 0 {
 		return 1
-	} else {
+	} else if input == 1 {
 		return 0
+	} else {
+		panic("Number was not 0 or 1")
 	}
+}
+
+func leastCommonValue(input []int) int {
+	return not(mostCommonValue(input))
 }
 
 func calculateGamma(input [][]int) []int {
 	output := make([]int, len(input))
 	for i, numbers := range input {
-		sum := 0
-		for _, number := range numbers {
-			sum += number
-		}
-		majority := 0
-		if sum > len(numbers)/2.0 {
-			majority = 1
-		}
-		output[i] = majority
+		output[i] = mostCommonValue(numbers)
 	}
 	return output
 }
@@ -146,13 +128,7 @@ func calculateGamma(input [][]int) []int {
 func complement(input []int) []int {
 	output := make([]int, len(input))
 	for i, number := range input {
-		if number == 0 {
-			output[i] = 1
-		} else if number == 1 {
-			output[i] = 0
-		} else {
-			panic("Number was not 0 or 1")
-		}
+		output[i] = not(number)
 	}
 	return output
 }
