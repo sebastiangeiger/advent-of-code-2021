@@ -15,7 +15,7 @@ func Run(problem int) {
 	case 2:
 		problem2()
 	default:
-		common.PrintNotImplemented(2, problem)
+		common.PrintNotImplemented(3, problem)
 	}
 }
 
