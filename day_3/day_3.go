@@ -42,17 +42,28 @@ func solveProblem2(path string) {
 	lines := common.ReadLinesFrom(path)
 	matrix := toIntMatrix(lines)
 	oxygenGeneratorRating := calculateOxygenGeneratorRating(matrix)
-	fmt.Printf("oxygenGeneratorRating: %#v\n", oxygenGeneratorRating)
+	fmt.Printf("oxygenGeneratorRating: %#v\n", makeBase10(oxygenGeneratorRating))
 }
 
-func calculateOxygenGeneratorRating(input [][]int) []int {
-	pivoted := pivot(input)
-	for bitCriteriaIndex := 0; bitCriteriaIndex < len(pivoted); bitCriteriaIndex++ {
+func calculateOxygenGeneratorRating(candidates [][]int) []int {
+	for bitCriteriaIndex := 0; bitCriteriaIndex < len(candidates[0]); bitCriteriaIndex++ {
+		pivoted := pivot(candidates)
 		mostCommonValue := mostCommonValue(pivoted[bitCriteriaIndex])
-		fmt.Printf("Most common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], mostCommonValue)
+		newCandidates := [][]int{}
+		for _, candidate := range candidates {
+			if candidate[bitCriteriaIndex] == mostCommonValue {
+				newCandidates = append(newCandidates, candidate)
+			}
+		}
+		// fmt.Printf("Most common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], mostCommonValue)
+		// fmt.Printf("  %#v\ngot reduced to \n  %#v\n", candidates, newCandidates)
+		if len(newCandidates) == 1 {
+			return newCandidates[0]
+		} else {
+			candidates = newCandidates
+		}
 	}
-	output := input[0]
-	return output
+	panic("I shouldn't get here")
 }
 
 func sum(input []int) int {
