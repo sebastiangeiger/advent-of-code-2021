@@ -25,7 +25,8 @@ func problem1() {
 }
 
 func problem2() {
-	solveProblem2("day_3_test.input")
+	fmt.Printf("Life Support (test): %d\n", solveProblem2("day_3_test.input"))
+	fmt.Printf("Life Support (real): %d\n", solveProblem2("day_3.input"))
 }
 
 func solveProblem1(path string) int {
@@ -38,11 +39,14 @@ func solveProblem1(path string) int {
 	return makeBase10(gamma) * makeBase10(epsilon)
 }
 
-func solveProblem2(path string) {
+func solveProblem2(path string) int {
 	lines := common.ReadLinesFrom(path)
 	matrix := toIntMatrix(lines)
 	oxygenGeneratorRating := calculateOxygenGeneratorRating(matrix)
+	scrubberRating := calculateScrubberRating(matrix)
 	fmt.Printf("oxygenGeneratorRating: %#v\n", makeBase10(oxygenGeneratorRating))
+	fmt.Printf("scrubberRating: %#v\n", makeBase10(scrubberRating))
+	return makeBase10(oxygenGeneratorRating) * makeBase10(scrubberRating)
 }
 
 func calculateOxygenGeneratorRating(candidates [][]int) []int {
@@ -56,6 +60,27 @@ func calculateOxygenGeneratorRating(candidates [][]int) []int {
 			}
 		}
 		// fmt.Printf("Most common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], mostCommonValue)
+		// fmt.Printf("  %#v\ngot reduced to \n  %#v\n", candidates, newCandidates)
+		if len(newCandidates) == 1 {
+			return newCandidates[0]
+		} else {
+			candidates = newCandidates
+		}
+	}
+	panic("I shouldn't get here")
+}
+
+func calculateScrubberRating(candidates [][]int) []int {
+	for bitCriteriaIndex := 0; bitCriteriaIndex < len(candidates[0]); bitCriteriaIndex++ {
+		pivoted := pivot(candidates)
+		leastCommonValue := leastCommonValue(pivoted[bitCriteriaIndex])
+		newCandidates := [][]int{}
+		for _, candidate := range candidates {
+			if candidate[bitCriteriaIndex] == leastCommonValue {
+				newCandidates = append(newCandidates, candidate)
+			}
+		}
+		// fmt.Printf("Least common value for '%#v' is '%#v'\n", pivoted[bitCriteriaIndex], leastCommonValue)
 		// fmt.Printf("  %#v\ngot reduced to \n  %#v\n", candidates, newCandidates)
 		if len(newCandidates) == 1 {
 			return newCandidates[0]
@@ -90,6 +115,15 @@ func mostCommonValue(input []int) int {
 		} else {
 			return 0
 		}
+	}
+}
+
+func leastCommonValue(input []int) int {
+	mostCommonValue := mostCommonValue(input)
+	if mostCommonValue == 0 {
+		return 1
+	} else {
+		return 0
 	}
 }
 
