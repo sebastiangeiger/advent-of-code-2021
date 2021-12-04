@@ -21,19 +21,19 @@ func Run(problem int) {
 
 func problem1() {
 	testPosition := Position{0, 0}
-	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input", false))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := Position{0, 0}
-	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input", false))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 
 func problem2() {
 	testPosition := PositionWithAim{0, 0, 0}
-	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input"))
+	testPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2_test.input", false))
 	fmt.Printf("Multiplied (test): %d\n", testPosition.Multiply())
 	realPosition := PositionWithAim{0, 0, 0}
-	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input"))
+	realPosition.ApplyNavigationSteps(common.ReadLinesFrom("day_2.input", false))
 	fmt.Printf("Multiplied (real): %d\n", realPosition.Multiply())
 }
 

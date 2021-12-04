@@ -7,18 +7,23 @@ import (
 	"strings"
 )
 
-func ReadLinesFrom(path string) []string {
+func ReadLinesFrom(path string, includeEmptyLines bool) []string {
 	data, fileError := os.ReadFile(filepath.Join("inputs", path))
 	if fileError != nil {
 		panic(fileError)
 	}
-	lines := []string{}
-	for _, line := range strings.Split(string(data), "\n") {
-		if line != "" {
-			lines = append(lines, line)
+	allLines := strings.Split(string(data), "\n")
+	if includeEmptyLines {
+		return allLines
+	} else {
+		lines := []string{}
+		for _, line := range allLines {
+			if line != "" {
+				lines = append(lines, line)
+			}
 		}
+		return lines
 	}
-	return lines
 }
 
 func PrintNotImplemented(day int, problem int) {

@@ -57,7 +57,7 @@ func countStepIncreases(measurements []int) int {
 }
 
 func readIntsFrom(path string) []int {
-	lines := common.ReadLinesFrom(path)
+	lines := common.ReadLinesFrom(path, false)
 	integers := []int{}
 	for _, line := range lines {
 		integer, err := strconv.Atoi(line)
