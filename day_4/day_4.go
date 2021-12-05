@@ -30,11 +30,21 @@ func problem2() {
 func solveProblem1(path string) {
 	lines := common.ReadLinesFrom(path, true)
 	drawnNumbers, bingoBoards := makeDatastructures(lines)
-	fmt.Printf("drawnNumbers: %#v", drawnNumbers)
-	for _, board := range bingoBoards {
-		board.Mark(7)
+	winningBoard, winningDraw := runGame(bingoBoards, drawnNumbers)
+	fmt.Printf("We got a winner (%d): %#v\n", winningDraw, winningBoard)
+}
+
+func runGame(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
+	for _, drawnNumber := range drawnNumbers {
+		fmt.Printf("Marking: %#v\n", drawnNumber)
+		for _, board := range bingoBoards {
+			board.Mark(drawnNumber)
+			if board.HasWon() {
+				return board, drawnNumber
+			}
+		}
 	}
-	fmt.Printf("bingoBoards: %#v", bingoBoards)
+	panic("Nothing has won and we're at the end of the drawn numbers")
 }
 
 func makeDatastructures(lines []string) ([]int, []BingoBoard) {
