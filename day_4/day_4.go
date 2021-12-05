@@ -34,11 +34,6 @@ func solveProblem1(path string) {
 	fmt.Printf("bingoBoards: %#v", bingoBoards)
 }
 
-type BingoBoard struct {
-	board  [][]int
-	marked [][]bool
-}
-
 func makeDatastructures(lines []string) ([]int, []BingoBoard) {
 	partitions := makePartitions(lines)
 	drawnNumbers := makeDrawnNumbers(partitions[0][0])
