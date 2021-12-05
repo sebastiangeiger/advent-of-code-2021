@@ -37,6 +37,11 @@ func solveProblem1(path string) {
 	fmt.Printf("bingoBoards: %#v", bingoBoards)
 }
 
+type BingoBoard struct {
+	board  [][]int
+	marked [][]bool
+}
+
 func makePartitions(lines []string) [][]string {
 	output := [][]string{}
 	currentPartition := []string{}
@@ -54,11 +59,13 @@ func makePartitions(lines []string) [][]string {
 	return output
 }
 
-func makeBingoBoards(partitions [][]string) [][][]int {
-	boards := [][][]int{}
+func makeBingoBoards(partitions [][]string) []BingoBoard {
+	boards := []BingoBoard{}
 	for _, partition := range partitions {
 		board := toIntMatrix(partition)
-		boards = append(boards, board)
+		marked := common.InitializeBoolArray(len(board), len(board[0]))
+		bingoBoard := BingoBoard{board, marked}
+		boards = append(boards, bingoBoard)
 	}
 	return boards
 }

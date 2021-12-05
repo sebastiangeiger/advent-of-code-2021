@@ -38,3 +38,11 @@ func InitializeArray(dx int, dy int) [][]int {
 	}
 	return result
 }
+
+func InitializeBoolArray(dx int, dy int) [][]bool {
+	result := make([][]bool, dx)
+	for i := 0; i < dx; i++ {
+		result[i] = make([]bool, dy)
+	}
+	return result
+}
