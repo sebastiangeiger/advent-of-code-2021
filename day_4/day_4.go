@@ -21,6 +21,7 @@ func Run(problem int) {
 
 func problem1() {
 	fmt.Printf("UnmarkedSum x Draw (test): %d\n", solveProblem1("day_4_test.input"))
+	fmt.Printf("UnmarkedSum x Draw (real): %d\n", solveProblem1("day_4.input"))
 }
 
 func problem2() {
