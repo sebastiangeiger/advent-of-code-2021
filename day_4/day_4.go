@@ -31,6 +31,9 @@ func solveProblem1(path string) {
 	lines := common.ReadLinesFrom(path, true)
 	drawnNumbers, bingoBoards := makeDatastructures(lines)
 	fmt.Printf("drawnNumbers: %#v", drawnNumbers)
+	for _, board := range bingoBoards {
+		board.Mark(7)
+	}
 	fmt.Printf("bingoBoards: %#v", bingoBoards)
 }
 
