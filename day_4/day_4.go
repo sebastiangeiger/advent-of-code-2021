@@ -20,22 +20,30 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("UnmarkedSum x Draw (test): %d\n", solveProblem1("day_4_test.input"))
-	fmt.Printf("UnmarkedSum x Draw (real): %d\n", solveProblem1("day_4.input"))
+	fmt.Printf("First win: UnmarkedSum x Draw (test): %d\n", solveProblem1("day_4_test.input"))
+	fmt.Printf("First win: UnmarkedSum x Draw (real): %d\n", solveProblem1("day_4.input"))
 }
 
 func problem2() {
-	fmt.Println("Implement Day 4 - Problem 2")
+	fmt.Printf("Last win: UnmarkedSum x Draw (test): %d\n", solveProblem2("day_4_test.input"))
+	fmt.Printf("Last win: UnmarkedSum x Draw (real): %d\n", solveProblem2("day_4.input"))
 }
 
 func solveProblem1(path string) int {
 	lines := common.ReadLinesFrom(path, true)
 	drawnNumbers, bingoBoards := makeDatastructures(lines)
-	winningBoard, winningDraw := runGame(bingoBoards, drawnNumbers)
+	winningBoard, winningDraw := findFirstWin(bingoBoards, drawnNumbers)
 	return winningDraw * winningBoard.UnmarkedSum()
 }
 
-func runGame(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
+func solveProblem2(path string) int {
+	lines := common.ReadLinesFrom(path, true)
+	drawnNumbers, bingoBoards := makeDatastructures(lines)
+	winningBoard, winningDraw := findLastWin(bingoBoards, drawnNumbers)
+	return winningDraw * winningBoard.UnmarkedSum()
+}
+
+func findFirstWin(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
 	for _, drawnNumber := range drawnNumbers {
 		for _, board := range bingoBoards {
 			board.Mark(drawnNumber)
@@ -45,6 +53,24 @@ func runGame(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
 		}
 	}
 	panic("Nothing has won and we're at the end of the drawn numbers")
+}
+
+func findLastWin(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
+	for _, drawnNumber := range drawnNumbers {
+		incompleteBoards := []BingoBoard{}
+		for _, board := range bingoBoards {
+			board.Mark(drawnNumber)
+			if !board.HasWon() {
+				incompleteBoards = append(incompleteBoards, board)
+			}
+		}
+		if len(bingoBoards) == 1 && len(incompleteBoards) == 0 {
+			return bingoBoards[0], drawnNumber
+		} else {
+			bingoBoards = incompleteBoards
+		}
+	}
+	panic("We're at the end of the drawn numbers")
 }
 
 func makeDatastructures(lines []string) ([]int, []BingoBoard) {
