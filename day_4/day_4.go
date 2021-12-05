@@ -29,10 +29,7 @@ func problem2() {
 
 func solveProblem1(path string) {
 	lines := common.ReadLinesFrom(path, true)
-	partitions := makePartitions(lines)
-	drawnNumbers := makeDrawnNumbers(partitions[0][0])
-	bingoBoards := makeBingoBoards(partitions[1:])
-	// fmt.Printf("partitions: %#v", partitions)
+	drawnNumbers, bingoBoards := makeDatastructures(lines)
 	fmt.Printf("drawnNumbers: %#v", drawnNumbers)
 	fmt.Printf("bingoBoards: %#v", bingoBoards)
 }
@@ -40,6 +37,13 @@ func solveProblem1(path string) {
 type BingoBoard struct {
 	board  [][]int
 	marked [][]bool
+}
+
+func makeDatastructures(lines []string) ([]int, []BingoBoard) {
+	partitions := makePartitions(lines)
+	drawnNumbers := makeDrawnNumbers(partitions[0][0])
+	bingoBoards := makeBingoBoards(partitions[1:])
+	return drawnNumbers, bingoBoards
 }
 
 func makePartitions(lines []string) [][]string {
