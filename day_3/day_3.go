@@ -30,7 +30,7 @@ func problem2() {
 }
 
 func solveProblem1(path string) int {
-	lines := common.ReadLinesFrom(path)
+	lines := common.ReadLinesFrom(path, false)
 	pivoted := pivot(toIntMatrix(lines))
 	gamma := calculateGamma(pivoted)
 	epsilon := complement(gamma)
@@ -40,7 +40,7 @@ func solveProblem1(path string) int {
 }
 
 func solveProblem2(path string) int {
-	lines := common.ReadLinesFrom(path)
+	lines := common.ReadLinesFrom(path, false)
 	matrix := toIntMatrix(lines)
 	oxygenGeneratorRating := calculateOxygenGeneratorRating(matrix)
 	scrubberRating := calculateScrubberRating(matrix)
