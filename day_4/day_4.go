@@ -20,23 +20,22 @@ func Run(problem int) {
 }
 
 func problem1() {
-	solveProblem1("day_4_test.input")
+	fmt.Printf("UnmarkedSum x Draw (test): %d\n", solveProblem1("day_4_test.input"))
 }
 
 func problem2() {
 	fmt.Println("Implement Day 4 - Problem 2")
 }
 
-func solveProblem1(path string) {
+func solveProblem1(path string) int {
 	lines := common.ReadLinesFrom(path, true)
 	drawnNumbers, bingoBoards := makeDatastructures(lines)
 	winningBoard, winningDraw := runGame(bingoBoards, drawnNumbers)
-	fmt.Printf("We got a winner (%d): %#v\n", winningDraw, winningBoard)
+	return winningDraw * winningBoard.UnmarkedSum()
 }
 
 func runGame(bingoBoards []BingoBoard, drawnNumbers []int) (BingoBoard, int) {
 	for _, drawnNumber := range drawnNumbers {
-		fmt.Printf("Marking: %#v\n", drawnNumber)
 		for _, board := range bingoBoards {
 			board.Mark(drawnNumber)
 			if board.HasWon() {

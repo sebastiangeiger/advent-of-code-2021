@@ -48,3 +48,16 @@ func (bingoBoard *BingoBoard) HasWon() bool {
 	}
 	return false
 }
+
+func (bingoBoard *BingoBoard) UnmarkedSum() int {
+	dx, dy := bingoBoard.Dim()
+	sum := 0
+	for x := 0; x < dx; x++ {
+		for y := 0; y < dy; y++ {
+			if bingoBoard.marked[x][y] == false {
+				sum += bingoBoard.board[x][y]
+			}
+		}
+	}
+	return sum
+}
