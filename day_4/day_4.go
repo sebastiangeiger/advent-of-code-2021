@@ -72,10 +72,10 @@ func makeBingoBoards(partitions [][]string) []BingoBoard {
 
 func toIntMatrix(lines []string) [][]int {
 	dx := len(lines)
-	dy := len(toIntLine(lines[0]))
+	dy := len(toIntLine(lines[0], " "))
 	result := common.InitializeArray(dx, dy)
 	for x := 0; x < dx; x++ {
-		currentLine := toIntLine(lines[x])
+		currentLine := toIntLine(lines[x], " ")
 		if len(currentLine) != dy {
 			panic(fmt.Sprintf("Expected lines[%d] to be %d long but was %d", x, dy, len(currentLine)))
 		}
@@ -84,9 +84,9 @@ func toIntMatrix(lines []string) [][]int {
 	return result
 }
 
-func toIntLine(line string) []int {
+func toIntLine(line string, separator string) []int {
 	result := []int{}
-	for _, element := range strings.Split(line, " ") {
+	for _, element := range strings.Split(line, separator) {
 		if len(element) > 0 {
 			number, err := strconv.Atoi(string(element))
 			if err != nil {
@@ -100,15 +100,5 @@ func toIntLine(line string) []int {
 }
 
 func makeDrawnNumbers(input string) []int {
-	split := strings.Split(input, ",")
-	output := make([]int, len(split))
-	for i, s := range split {
-		parsed, err := strconv.Atoi(s)
-		if err == nil {
-			output[i] = parsed
-		} else {
-			panic("Couldn't parse number")
-		}
-	}
-	return output
+	return toIntLine(input, ",")
 }
