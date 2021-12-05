@@ -30,3 +30,11 @@ func PrintNotImplemented(day int, problem int) {
 	fmt.Printf("Day %d - problem %d is not implemented yet", day, problem)
 	os.Exit(1)
 }
+
+func InitializeArray(dx int, dy int) [][]int {
+	result := make([][]int, dx)
+	for i := 0; i < dx; i++ {
+		result[i] = make([]int, dy)
+	}
+	return result
+}

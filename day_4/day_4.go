@@ -31,8 +31,10 @@ func solveProblem1(path string) {
 	lines := common.ReadLinesFrom(path, true)
 	partitions := makePartitions(lines)
 	drawnNumbers := makeDrawnNumbers(partitions[0][0])
-	fmt.Printf("partitions: %#v", partitions)
+	bingoBoards := makeBingoBoards(partitions[1:])
+	// fmt.Printf("partitions: %#v", partitions)
 	fmt.Printf("drawnNumbers: %#v", drawnNumbers)
+	fmt.Printf("bingoBoards: %#v", bingoBoards)
 }
 
 func makePartitions(lines []string) [][]string {
@@ -50,6 +52,44 @@ func makePartitions(lines []string) [][]string {
 		output = append(output, currentPartition)
 	}
 	return output
+}
+
+func makeBingoBoards(partitions [][]string) [][][]int {
+	boards := [][][]int{}
+	for _, partition := range partitions {
+		board := toIntMatrix(partition)
+		boards = append(boards, board)
+	}
+	return boards
+}
+
+func toIntMatrix(lines []string) [][]int {
+	dx := len(lines)
+	dy := len(toIntLine(lines[0]))
+	result := common.InitializeArray(dx, dy)
+	for x := 0; x < dx; x++ {
+		currentLine := toIntLine(lines[x])
+		if len(currentLine) != dy {
+			panic(fmt.Sprintf("Expected lines[%d] to be %d long but was %d", x, dy, len(currentLine)))
+		}
+		result[x] = currentLine
+	}
+	return result
+}
+
+func toIntLine(line string) []int {
+	result := []int{}
+	for _, element := range strings.Split(line, " ") {
+		if len(element) > 0 {
+			number, err := strconv.Atoi(string(element))
+			if err != nil {
+				panic(err)
+			} else {
+				result = append(result, number)
+			}
+		}
+	}
+	return result
 }
 
 func makeDrawnNumbers(input string) []int {
