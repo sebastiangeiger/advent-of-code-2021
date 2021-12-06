@@ -20,7 +20,8 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("After 80 days (test): %d", solveProblem1("day_6_test.input", true))
+	fmt.Printf("After 80 days (test): %d\n", solveProblem1("day_6_test.input", false))
+	fmt.Printf("After 80 days (real): %d\n", solveProblem1("day_6.input", false))
 }
 
 func problem2() {
@@ -30,14 +31,14 @@ func problem2() {
 func solveProblem1(path string, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	population := common.ToIntLine(line, ",")
-	maxDays := 18
-	for day := 0; day <= maxDays; day++ {
-		if printDebug {
+	maxDays := 80
+	for day := 0; day < maxDays; day++ {
+		if printDebug && day <= 18 {
 			dayDisplay(day, population)
 		}
 		population = simulateDay(population)
 	}
-	return 1
+	return len(population)
 }
 
 func simulateDay(population []int) []int {
