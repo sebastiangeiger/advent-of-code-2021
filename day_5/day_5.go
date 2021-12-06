@@ -8,16 +8,6 @@ import (
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
 
-type Point struct {
-	x int
-	y int
-}
-
-type Line struct {
-	start Point
-	end   Point
-}
-
 func Run(problem int) {
 	switch problem {
 	case 1:
