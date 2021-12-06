@@ -35,7 +35,7 @@ func solveProblem(path string, maxDays int, printDebug bool) int {
 		if printDebug && day <= 18 {
 			dayDisplay(day, population)
 		} else if printDebug {
-			fmt.Printf("Day %d\n", day)
+			fmt.Printf("Day %d: %d\n", day, len(population))
 		}
 		population = simulateDay(population)
 	}
@@ -43,21 +43,20 @@ func solveProblem(path string, maxDays int, printDebug bool) int {
 }
 
 func simulateDay(population []int) []int {
-	agedPopulation := make([]int, len(population))
 	newSpawnsAmount := 0
 	for i, individual := range population {
 		if individual == 0 {
-			agedPopulation[i] = 6
+			population[i] = 6
 			newSpawnsAmount += 1
 		} else {
-			agedPopulation[i] = individual - 1
+			population[i] = individual - 1
 		}
 	}
 	newSpawns := make([]int, newSpawnsAmount)
 	for i := 0; i < newSpawnsAmount; i++ {
 		newSpawns[i] = 8
 	}
-	return append(agedPopulation, newSpawns...)
+	return append(population, newSpawns...)
 }
 
 func dayDisplay(day int, population []int) {
