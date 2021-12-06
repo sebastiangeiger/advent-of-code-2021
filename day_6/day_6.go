@@ -31,7 +31,7 @@ func problem2() {
 
 func solveProblem(path string, maxDays int, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
-	population := common.ToIntLine(line, ",")
+	population := toInt8Array(common.ToIntLine(line, ","))
 	for day := 0; day < maxDays; day++ {
 		start := time.Now()
 		if printDebug && day <= 18 {
@@ -46,7 +46,7 @@ func solveProblem(path string, maxDays int, printDebug bool) int {
 	return len(population)
 }
 
-func simulateDay(population []int) []int {
+func simulateDay(population []int8) []int8 {
 	newSpawnsAmount := 0
 	for i, individual := range population {
 		if individual == 0 {
@@ -56,17 +56,25 @@ func simulateDay(population []int) []int {
 			population[i] = individual - 1
 		}
 	}
-	newSpawns := make([]int, newSpawnsAmount)
+	newSpawns := make([]int8, newSpawnsAmount)
 	for i := 0; i < newSpawnsAmount; i++ {
 		newSpawns[i] = 8
 	}
 	return append(population, newSpawns...)
 }
 
-func dayDisplay(day int, population []int) {
+func toInt8Array(array []int) []int8 {
+	result := make([]int8, len(array))
+	for i, el := range array {
+		result[i] = int8(el)
+	}
+	return result
+}
+
+func dayDisplay(day int, population []int8) {
 	result := []string{}
 	for _, pop := range population {
-		result = append(result, strconv.Itoa(pop))
+		result = append(result, strconv.Itoa(int(pop)))
 	}
 	strResult := strings.Join(result, ",")
 	fmt.Printf("After %2d days: %s\n", day, strResult)
