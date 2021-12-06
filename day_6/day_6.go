@@ -32,6 +32,10 @@ func problem2() {
 func solveProblem(path string, maxDays int, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	population := toInt8Array(common.ToIntLine(line, ","))
+	return simulatePopulation(population, maxDays, printDebug)
+}
+
+func simulatePopulation(population []int8, maxDays int, printDebug bool) int {
 	for day := 0; day < maxDays; day++ {
 		start := time.Now()
 		if printDebug && day <= 18 {
@@ -41,7 +45,9 @@ func solveProblem(path string, maxDays int, printDebug bool) int {
 		}
 		population = simulateDay(population)
 		elapsed := time.Since(start)
-		fmt.Printf(" took %s\n", elapsed)
+		if printDebug {
+			fmt.Printf(" took %s\n", elapsed)
+		}
 	}
 	return len(population)
 }
