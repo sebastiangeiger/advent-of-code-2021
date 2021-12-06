@@ -21,6 +21,7 @@ func Run(problem int) {
 
 func problem1() {
 	fmt.Printf("Problem1 (test): %d\n", solveProblem1("day_5_test.input"))
+	fmt.Printf("Problem1 (real): %d\n", solveProblem1("day_5.input"))
 }
 
 func problem2() {
@@ -31,7 +32,7 @@ func solveProblem1(path string) int {
 	strings := common.ReadLinesFrom(path, false)
 	lines := onlyHorizontalAndVertical(makeLines(strings))
 	field := makeField(lines)
-	printField(field)
+	// printField(field)
 	return findNumberOfOverlaps(field)
 }
 
@@ -41,7 +42,7 @@ func makeField(lines []Line) [][]int {
 	for _, line := range lines {
 		points := line.ToPoints()
 		for _, point := range points {
-			field[point.y][point.x] += 1
+			field[point.x][point.y] += 1
 		}
 	}
 	return field
