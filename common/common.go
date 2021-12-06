@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -74,4 +75,19 @@ func StartEnd(a int, b int) (int, int) {
 	} else {
 		return b, a
 	}
+}
+
+func ToIntLine(line string, separator string) []int {
+	result := []int{}
+	for _, element := range strings.Split(line, separator) {
+		if len(element) > 0 {
+			number, err := strconv.Atoi(string(element))
+			if err != nil {
+				panic(err)
+			} else {
+				result = append(result, number)
+			}
+		}
+	}
+	return result
 }
