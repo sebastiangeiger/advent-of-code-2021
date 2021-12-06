@@ -67,3 +67,11 @@ func Min(numbers ...int) int {
 	}
 	return min
 }
+
+func StartEnd(a int, b int) (int, int) {
+	if a < b {
+		return a, b
+	} else {
+		return b, a
+	}
+}

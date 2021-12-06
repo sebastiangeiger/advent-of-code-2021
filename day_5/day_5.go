@@ -25,12 +25,21 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Printf("Implement Day 5, Problem 2")
+	fmt.Printf("Problem2 (test): %d\n", solveProblem2("day_5_test.input"))
+	fmt.Printf("Problem2 (real): %d\n", solveProblem2("day_5.input"))
 }
 
 func solveProblem1(path string) int {
 	strings := common.ReadLinesFrom(path, false)
 	lines := onlyHorizontalAndVertical(makeLines(strings))
+	field := makeField(lines)
+	// printField(field)
+	return findNumberOfOverlaps(field)
+}
+
+func solveProblem2(path string) int {
+	strings := common.ReadLinesFrom(path, false)
+	lines := onlyHorizontalVerticalAndDiagonal(makeLines(strings))
 	field := makeField(lines)
 	// printField(field)
 	return findNumberOfOverlaps(field)
@@ -87,6 +96,16 @@ func onlyHorizontalAndVertical(lines []Line) []Line {
 	selectedLines := []Line{}
 	for _, line := range lines {
 		if line.IsHorizontal() || line.IsVertical() {
+			selectedLines = append(selectedLines, line)
+		}
+	}
+	return selectedLines
+}
+
+func onlyHorizontalVerticalAndDiagonal(lines []Line) []Line {
+	selectedLines := []Line{}
+	for _, line := range lines {
+		if line.IsHorizontal() || line.IsVertical() || line.IsDiagonal() {
 			selectedLines = append(selectedLines, line)
 		}
 	}
