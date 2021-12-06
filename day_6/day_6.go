@@ -20,21 +20,22 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("After 80 days (test): %d\n", solveProblem1("day_6_test.input", false))
-	fmt.Printf("After 80 days (real): %d\n", solveProblem1("day_6.input", false))
+	fmt.Printf("After 80 days (test): %d\n", solveProblem("day_6_test.input", 80, false))
+	fmt.Printf("After 80 days (real): %d\n", solveProblem("day_6.input", 80, false))
 }
 
 func problem2() {
-	fmt.Println("Day 6 - Problem 2")
+	fmt.Printf("After 256 days (test): %d\n", solveProblem("day_6_test.input", 256, true))
 }
 
-func solveProblem1(path string, printDebug bool) int {
+func solveProblem(path string, maxDays int, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	population := common.ToIntLine(line, ",")
-	maxDays := 80
 	for day := 0; day < maxDays; day++ {
 		if printDebug && day <= 18 {
 			dayDisplay(day, population)
+		} else if printDebug {
+			fmt.Printf("Day %d\n", day)
 		}
 		population = simulateDay(population)
 	}
@@ -43,14 +44,18 @@ func solveProblem1(path string, printDebug bool) int {
 
 func simulateDay(population []int) []int {
 	agedPopulation := make([]int, len(population))
-	newSpawns := []int{}
+	newSpawnsAmount := 0
 	for i, individual := range population {
 		if individual == 0 {
 			agedPopulation[i] = 6
-			newSpawns = append(newSpawns, 8)
+			newSpawnsAmount += 1
 		} else {
 			agedPopulation[i] = individual - 1
 		}
+	}
+	newSpawns := make([]int, newSpawnsAmount)
+	for i := 0; i < newSpawnsAmount; i++ {
+		newSpawns[i] = 8
 	}
 	return append(agedPopulation, newSpawns...)
 }
