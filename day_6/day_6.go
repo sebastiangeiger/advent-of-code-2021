@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
@@ -32,12 +33,15 @@ func solveProblem(path string, maxDays int, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	population := common.ToIntLine(line, ",")
 	for day := 0; day < maxDays; day++ {
+		start := time.Now()
 		if printDebug && day <= 18 {
 			dayDisplay(day, population)
 		} else if printDebug {
-			fmt.Printf("Day %d: %d\n", day, len(population))
+			fmt.Printf("Day %d: %d", day, len(population))
 		}
 		population = simulateDay(population)
+		elapsed := time.Since(start)
+		fmt.Printf(" took %s\n", elapsed)
 	}
 	return len(population)
 }
