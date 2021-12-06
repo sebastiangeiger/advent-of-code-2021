@@ -32,22 +32,19 @@ func solveProblem1(path string) int {
 	lines := onlyHorizontalAndVertical(makeLines(strings))
 	field := makeField(lines)
 	printField(field)
-	fmt.Printf("%#v\n", lines)
-	fmt.Printf("%#v\n", field)
-	return 1
+	return findNumberOfOverlaps(field)
 }
 
 func makeField(lines []Line) [][]int {
-	findDimensions(lines)
 	dx, dy := findDimensions(lines)
-	result := common.InitializeArray(dx, dy)
+	field := common.InitializeArray(dx, dy)
 	for _, line := range lines {
 		points := line.ToPoints()
 		for _, point := range points {
-			result[point.y][point.x] += 1
+			field[point.y][point.x] += 1
 		}
 	}
-	return result
+	return field
 }
 
 func printField(field [][]int) {
@@ -61,6 +58,18 @@ func printField(field [][]int) {
 		}
 		fmt.Printf("\n")
 	}
+}
+
+func findNumberOfOverlaps(field [][]int) int {
+	overlaps := 0
+	for _, line := range field {
+		for _, cell := range line {
+			if cell >= 2 {
+				overlaps += 1
+			}
+		}
+	}
+	return overlaps
 }
 
 func findDimensions(lines []Line) (int, int) {
