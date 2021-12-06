@@ -62,10 +62,17 @@ func solveProblem2(path string, maxDays int, printDebug bool) int {
 
 func buildLookupTable(maxDays int) [][]int {
 	result := common.InitializeArray(9, maxDays+1)
-	for num := 0; num <= 8; num++ {
-		for day := 0; day <= maxDays; day++ {
-			res := simulatePopulation([]int8{int8(num)}, day, false)
-			result[num][day] = res
+	for day := 0; day <= maxDays; day++ {
+		for num := 0; num <= 8; num++ {
+			if day == 0 {
+				// fmt.Printf("result[%d][%d] = 1\n", num, day)
+				result[num][day] = 1
+			} else if num == 0 {
+				// fmt.Printf("result[%d][%d] = result[6][%d] + result[8][%d]\n", num, day, day-1, day-1)
+				result[num][day] = result[6][day-1] + result[8][day-1]
+			} else {
+				result[num][day] = result[num-1][day-1]
+			}
 		}
 	}
 	return result
