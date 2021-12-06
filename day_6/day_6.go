@@ -21,18 +21,43 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("After 80 days (test): %d\n", solveProblem("day_6_test.input", 80, false))
-	fmt.Printf("After 80 days (real): %d\n", solveProblem("day_6.input", 80, false))
+	fmt.Printf("After 80 days (test): %d\n", solveProblem1("day_6_test.input", 80, false))
+	fmt.Printf("After 80 days (real): %d\n", solveProblem1("day_6.input", 80, false))
 }
 
 func problem2() {
-	fmt.Printf("After 256 days (test): %d\n", solveProblem("day_6_test.input", 256, true))
+	fmt.Printf("After 256 days (test): %d\n", solveProblem2("day_6_test.input", 256, true))
 }
 
-func solveProblem(path string, maxDays int, printDebug bool) int {
+func solveProblem1(path string, maxDays int, printDebug bool) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	population := toInt8Array(common.ToIntLine(line, ","))
-	return simulatePopulation(population, maxDays, printDebug)
+	table := buildLookupTable(80)
+	sum := 0
+	for _, individual := range population {
+		sum += table[individual][80]
+	}
+	return sum
+}
+
+func solveProblem2(path string, maxDays int, printDebug bool) int {
+	line := common.ReadLinesFrom(path, false)[0]
+	population := toInt8Array(common.ToIntLine(line, ","))
+	fmt.Printf("%#v\n", population)
+	table := buildLookupTable(80)
+	fmt.Printf("%#v\n", table)
+	return 1
+}
+
+func buildLookupTable(maxDays int) [][]int {
+	result := common.InitializeArray(9, maxDays+1)
+	for num := 1; num <= 8; num++ {
+		for day := 0; day <= maxDays; day++ {
+			res := simulatePopulation([]int8{int8(num)}, day, false)
+			result[num][day] = res
+		}
+	}
+	return result
 }
 
 func simulatePopulation(population []int8, maxDays int, printDebug bool) int {
