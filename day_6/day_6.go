@@ -45,13 +45,24 @@ func solveProblem2(path string, maxDays int, printDebug bool) int {
 	population := toInt8Array(common.ToIntLine(line, ","))
 	fmt.Printf("%#v\n", population)
 	table := buildLookupTable(80)
-	fmt.Printf("%#v\n", table)
+	fmt.Printf("   ")
+	for day, _ := range table[0] {
+		fmt.Printf("%4d ", day)
+	}
+	fmt.Printf("\n")
+	for num, row := range table {
+		fmt.Printf("%d: ", num)
+		for _, cell := range row {
+			fmt.Printf("%4d ", cell)
+		}
+		fmt.Printf("\n")
+	}
 	return 1
 }
 
 func buildLookupTable(maxDays int) [][]int {
 	result := common.InitializeArray(9, maxDays+1)
-	for num := 1; num <= 8; num++ {
+	for num := 0; num <= 8; num++ {
 		for day := 0; day <= maxDays; day++ {
 			res := simulatePopulation([]int8{int8(num)}, day, false)
 			result[num][day] = res
