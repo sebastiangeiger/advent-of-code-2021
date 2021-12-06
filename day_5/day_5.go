@@ -29,9 +29,19 @@ func problem2() {
 
 func solveProblem1(path string) int {
 	strings := common.ReadLinesFrom(path, false)
-	lines := makeLines(strings)
+	lines := onlyHorizontalAndVertical(makeLines(strings))
 	fmt.Printf("%#v\n", lines)
 	return 1
+}
+
+func onlyHorizontalAndVertical(lines []Line) []Line {
+	selectedLines := []Line{}
+	for _, line := range lines {
+		if line.IsHorizontal() || line.IsVertical() {
+			selectedLines = append(selectedLines, line)
+		}
+	}
+	return selectedLines
 }
 
 func makeLines(expressions []string) []Line {
