@@ -41,7 +41,17 @@ func solveProblem1(path string, printDebug bool) int {
 }
 
 func simulateDay(population []int) []int {
-	return population
+	agedPopulation := make([]int, len(population))
+	newSpawns := []int{}
+	for i, individual := range population {
+		if individual == 0 {
+			agedPopulation[i] = 6
+			newSpawns = append(newSpawns, 8)
+		} else {
+			agedPopulation[i] = individual - 1
+		}
+	}
+	return append(agedPopulation, newSpawns...)
 }
 
 func dayDisplay(day int, population []int) {
