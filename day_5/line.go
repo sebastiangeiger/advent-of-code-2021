@@ -1,10 +1,17 @@
 package day_5
 
-import "github.com/sebastiangeiger/advent-of-code-2021/common"
+import (
+	"github.com/sebastiangeiger/advent-of-code-2021/common"
+)
 
 type Line struct {
 	start Point
 	end   Point
+}
+
+type Vector struct {
+	x int
+	y int
 }
 
 func (line *Line) IsHorizontal() bool {
@@ -22,23 +29,16 @@ func (line *Line) IsDiagonal() bool {
 }
 
 func (line *Line) ToPoints() []Point {
-	if !line.IsHorizontal() && !line.IsVertical() {
-		panic("Only works on horizontal/vertical lines!")
+	if !line.IsHorizontal() && !line.IsVertical() && !line.IsDiagonal() {
+		panic("Only works on horizontal/vertical/diagnoal lines!")
 	}
 	result := []Point{}
-	if line.IsHorizontal() {
-		xStart, xEnd := common.StartEnd(line.start.x, line.end.x)
-		y := line.start.y
-		for x := xStart; x <= xEnd; x++ {
-			result = append(result, Point{x, y})
-		}
+	vector := line.start.DirectionTo(line.end)
+	currentPoint := line.start
+	for line.end.ManhattanDistance(currentPoint) > 0 {
+		result = append(result, currentPoint)
+		currentPoint = currentPoint.AddVector(vector)
 	}
-	if line.IsVertical() {
-		yStart, yEnd := common.StartEnd(line.start.y, line.end.y)
-		x := line.start.x
-		for y := yStart; y <= yEnd; y++ {
-			result = append(result, Point{x, y})
-		}
-	}
+	result = append(result, line.end)
 	return result
 }
