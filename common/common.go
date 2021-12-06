@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -45,4 +46,32 @@ func InitializeBoolArray(dx int, dy int) [][]bool {
 		result[i] = make([]bool, dy)
 	}
 	return result
+}
+
+func Max(numbers ...int) int {
+	max := math.MinInt
+	for _, number := range numbers {
+		if number > max {
+			max = number
+		}
+	}
+	return max
+}
+
+func Min(numbers ...int) int {
+	min := math.MaxInt
+	for _, number := range numbers {
+		if number < min {
+			min = number
+		}
+	}
+	return min
+}
+
+func StartEnd(a int, b int) (int, int) {
+	if a < b {
+		return a, b
+	} else {
+		return b, a
+	}
 }
