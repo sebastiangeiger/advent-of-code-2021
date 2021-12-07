@@ -28,19 +28,26 @@ func problem2() {
 }
 
 func solveProblem1(path string) int {
+	return solveProblem(path, linearCost)
+}
+func solveProblem(path string, costFunction func(int, int) float64) int {
 	line := common.ReadLinesFrom(path, false)[0]
 	positions := common.ToIntLine(line, ",")
 	fuelCosts := []int{}
 	for i := common.Min(positions...); i <= common.Max(positions...); i++ {
-		fuelCosts = append(fuelCosts, alignTo(positions, i))
+		fuelCosts = append(fuelCosts, alignTo(positions, i, costFunction))
 	}
 	return common.Min(fuelCosts...)
 }
 
-func alignTo(positions []int, alignment int) int {
+func alignTo(positions []int, alignment int, costFunction func(int, int) float64) int {
 	cost := 0.0
 	for _, position := range positions {
-		cost += math.Abs(float64(position) - float64(alignment))
+		cost += costFunction(position, alignment)
 	}
 	return int(cost)
+}
+
+func linearCost(current int, target int) float64 {
+	return (math.Abs(float64(current) - float64(target)))
 }
