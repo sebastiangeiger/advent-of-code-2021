@@ -19,8 +19,8 @@ func Run(problem int) {
 }
 
 func problem1() {
-	solution := solveProblem1("day_7_test.input")
-	fmt.Printf("Minimum Fuel Cost (test): %d", solution)
+	fmt.Printf("Minimum Fuel Cost (test): %d\n", solveProblem1("day_7_test.input"))
+	fmt.Printf("Minimum Fuel Cost (real): %d\n", solveProblem1("day_7.input"))
 }
 
 func problem2() {
