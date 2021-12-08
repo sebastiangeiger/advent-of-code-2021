@@ -42,7 +42,8 @@ func interpretations(pattern string) []int {
 }
 
 func problem1() {
-	fmt.Printf("1,4,7,8 in output (test): %d", solveProblem1("day_8_test.input"))
+	fmt.Printf("1,4,7,8 in output (test): %d\n", solveProblem1("day_8_test.input"))
+	fmt.Printf("1,4,7,8 in output (real): %d\n", solveProblem1("day_8.input"))
 }
 
 func problem2() {
