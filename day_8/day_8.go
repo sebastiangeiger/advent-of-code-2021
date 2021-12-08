@@ -1,7 +1,9 @@
 package day_8
 
 import (
+	"errors"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
@@ -10,6 +12,15 @@ import (
 type Observation struct {
 	signals []string
 	output  []string
+}
+
+type DecodedObservation struct {
+	signals []int
+	output  []int
+}
+
+func (o Observation) Decode() DecodedObservation {
+	return DecodedObservation{[]int{}, []int{}}
 }
 
 func Run(problem int) {
@@ -21,6 +32,59 @@ func Run(problem int) {
 	default:
 		common.PrintNotImplemented(8, problem)
 	}
+}
+
+/*
+  0:      1:      2:      3:      4:
+ aaaa    ....    aaaa    aaaa    ....
+b    c  .    c  .    c  .    c  b    c
+b    c  .    c  .    c  .    c  b    c
+ ....    ....    dddd    dddd    dddd
+e    f  .    f  e    .  .    f  .    f
+e    f  .    f  e    .  .    f  .    f
+ gggg    ....    gggg    gggg    ....
+
+  5:      6:      7:      8:      9:
+ aaaa    aaaa    aaaa    aaaa    aaaa
+b    .  b    .  .    c  b    c  b    c
+b    .  b    .  .    c  b    c  b    c
+ dddd    dddd    ....    dddd    dddd
+.    f  e    f  .    f  e    f  .    f
+.    f  e    f  .    f  e    f  .    f
+ gggg    gggg    ....    gggg    gggg
+*/
+
+func signalToInt(signal string) (int, error) {
+	sortedSignal := sortInside(signal)
+	switch sortedSignal {
+	case "abcefg":
+		return 0, nil
+	case "cf":
+		return 1, nil
+	case "acdeg":
+		return 2, nil
+	case "acdfg":
+		return 3, nil
+	case "bcdf":
+		return 4, nil
+	case "abdfg":
+		return 5, nil
+	case "abdefg":
+		return 6, nil
+	case "acf":
+		return 7, nil
+	case "abcdefg":
+		return 8, nil
+	case "abcdfg":
+		return 9, nil
+	}
+	return -1, errors.New(fmt.Sprintf("Could not match '%s' to an integer", sortedSignal))
+}
+
+func sortInside(str string) string {
+	split := strings.Split(str, "")
+	sort.Strings(split)
+	return strings.Join(split, "")
 }
 
 func interpretations(pattern string) []int {
@@ -65,8 +129,12 @@ func solveProblem1(path string) int {
 }
 
 func solveProblem2(path string) int {
-	sum := 0
-	return sum
+	observations := parseLines(common.ReadLinesFrom(path, false))
+	for _, observation := range observations {
+		// fmt.Printf("%#v -> %#v\n", observation.output, observation.Decode().output)
+		fmt.Printf("%#v -> %#v\n", observation.output, observation.Decode().output)
+	}
+	return 1
 }
 func parseLines(lines []string) []Observation {
 	observations := make([]Observation, len(lines))
