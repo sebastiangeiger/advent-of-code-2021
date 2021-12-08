@@ -47,7 +47,7 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Day 8 - Problem 2")
+	fmt.Printf("Decoded (test): %d\n", solveProblem2("day_8_test.input"))
 }
 
 func solveProblem1(path string) int {
@@ -64,6 +64,10 @@ func solveProblem1(path string) int {
 	return sum
 }
 
+func solveProblem2(path string) int {
+	sum := 0
+	return sum
+}
 func parseLines(lines []string) []Observation {
 	observations := make([]Observation, len(lines))
 	for i, line := range lines {
