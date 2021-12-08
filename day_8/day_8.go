@@ -20,7 +20,29 @@ type DecodedObservation struct {
 }
 
 func (o Observation) Decode() DecodedObservation {
+	allDigits := append(o.signals, o.output...)
+	fmt.Printf("allDigits: %#v\n", allDigits)
+	fmt.Printf("mapping: %#v\n", findMapping(allDigits))
 	return DecodedObservation{[]int{}, []int{}}
+}
+
+func applyMapping(input string, mapping map[string]string) string {
+	splitInput := strings.Split(input, "")
+	result := make([]string, len(splitInput))
+	for i, r := range splitInput {
+		result[i] = mapping[r]
+	}
+	return strings.Join(result, "")
+}
+
+func findMapping(digits []string) int {
+	for _, digit := range digits {
+		interpretations := interpretations(digit)
+		if len(interpretations) == 1 {
+			fmt.Printf("  %s = %d\n", digit, interpretations[0])
+		}
+	}
+	return 1
 }
 
 func Run(problem int) {
@@ -87,8 +109,8 @@ func sortInside(str string) string {
 	return strings.Join(split, "")
 }
 
-func interpretations(pattern string) []int {
-	switch len(pattern) {
+func interpretations(digit string) []int {
+	switch len(digit) {
 	case 2:
 		return []int{1}
 	case 3:
