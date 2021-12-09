@@ -1,6 +1,9 @@
 package day_8
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestApplyMappingForIdentity(t *testing.T) {
 	var mapping = map[string]string{
@@ -35,5 +38,90 @@ func TestApplyMappingForComplicated(t *testing.T) {
 	result := applyMapping(input, mapping)
 	if result != want {
 		t.Errorf("applyMapping was wrong, expected '%s' but got '%s'", want, result)
+	}
+}
+
+func TestLeftShiftBy0(t *testing.T) {
+	input := []int{1, 2, 3, 4}
+	want := []int{1, 2, 3, 4}
+	result := leftShift(input, 0)
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("leftShift was wrong, expected '%v' but got '%v'", want, result)
+	}
+}
+
+func TestLeftShiftBy2(t *testing.T) {
+	input := []int{1, 2, 3, 4}
+	want := []int{3, 4, 1, 2}
+	result := leftShift(input, 2)
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("leftShift was wrong, expected '%v' but got '%v'", want, result)
+	}
+}
+
+func TestPermutationsWith1(t *testing.T) {
+	want := [][]int{[]int{1}}
+	result := permutations([]int{1})
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("permutations was wrong, expected '%v' but got '%v'", want, result)
+	}
+}
+
+func TestPermutationsWith2(t *testing.T) {
+	want := [][]int{
+		[]int{1, 2},
+		[]int{2, 1},
+	}
+	result := permutations([]int{1, 2})
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("permutations was wrong, expected '%v' but got '%v'", want, result)
+	}
+}
+
+func TestPermutationsWith3(t *testing.T) {
+	want := [][]int{
+		[]int{1, 2, 3},
+		[]int{1, 3, 2},
+		[]int{2, 3, 1},
+		[]int{2, 1, 3},
+		[]int{3, 1, 2},
+		[]int{3, 2, 1},
+	}
+	result := permutations([]int{1, 2, 3})
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("permutations was wrong, expected '%v' but got '%v'", want, result)
+	}
+}
+
+func TestPermutationsWith4(t *testing.T) {
+	want := [][]int{
+		[]int{1, 2, 3, 4},
+		[]int{1, 2, 4, 3},
+		[]int{1, 3, 4, 2},
+		[]int{1, 3, 2, 4},
+		[]int{1, 4, 2, 3},
+		[]int{1, 4, 3, 2},
+		[]int{2, 3, 4, 1},
+		[]int{2, 3, 1, 4},
+		[]int{2, 4, 1, 3},
+		[]int{2, 4, 3, 1},
+		[]int{2, 1, 3, 4},
+		[]int{2, 1, 4, 3},
+		[]int{3, 4, 1, 2},
+		[]int{3, 4, 2, 1},
+		[]int{3, 1, 2, 4},
+		[]int{3, 1, 4, 2},
+		[]int{3, 2, 4, 1},
+		[]int{3, 2, 1, 4},
+		[]int{4, 1, 2, 3},
+		[]int{4, 1, 3, 2},
+		[]int{4, 2, 3, 1},
+		[]int{4, 2, 1, 3},
+		[]int{4, 3, 1, 2},
+		[]int{4, 3, 2, 1},
+	}
+	result := permutations([]int{1, 2, 3, 4})
+	if !reflect.DeepEqual(result, want) {
+		t.Errorf("permutations was wrong, expected '%v' but got '%v'", want, result)
 	}
 }
