@@ -19,6 +19,7 @@ func Run(problem int) {
 
 func problem1() {
 	fmt.Printf("RiskLevel (test): %d\n", solveProblem1("day_9_test.input"))
+	fmt.Printf("RiskLevel (real): %d\n", solveProblem1("day_9.input"))
 }
 
 func problem2() {
