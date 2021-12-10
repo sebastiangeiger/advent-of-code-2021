@@ -14,6 +14,7 @@ import (
 	"github.com/sebastiangeiger/advent-of-code-2021/day_6"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_7"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_8"
+	"github.com/sebastiangeiger/advent-of-code-2021/day_9"
 )
 
 func main() {
@@ -58,6 +59,8 @@ func runDayProblem(day int, problem int) {
 		day_7.Run(problem)
 	case 8:
 		day_8.Run(problem)
+	case 9:
+		day_9.Run(problem)
 	default:
 		common.PrintNotImplemented(day, problem)
 	}
