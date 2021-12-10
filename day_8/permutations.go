@@ -1,7 +1,26 @@
 package day_8
 
+import "sort"
+
+func less(a []int, b []int) bool {
+	if len(a) == len(b) {
+		for i := 0; i < len(a); i++ {
+			if a[i] > b[i] {
+				return false
+			} else if a[i] < b[i] {
+				return true
+			}
+		}
+		return false
+	} else {
+		panic("Not the same length")
+	}
+}
+
 func permutations(input []int) [][]int {
-	return permutationsHelper([]int{}, input)
+	result := permutationsHelper([]int{}, input)
+	sort.SliceStable(result, func(i, j int) bool { return less(result[i], result[j]) })
+	return result
 }
 
 func permutationsHelper(currentPath []int, remainder []int) [][]int {
