@@ -2,6 +2,7 @@ package day_9
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
 )
@@ -90,10 +91,20 @@ func solveProblem2(path string) int {
 	for _, startingPoint := range findLowPoints(matrix) {
 		basins = append(basins, maximizeBasin(startingPoint, matrix))
 	}
+	lengths := make([]int, len(basins))
 	for i, b := range basins {
-		fmt.Printf("Basin %d: %v (%d)\n", i, b, len(b))
+		lengths[i] = len(b)
 	}
-	return 1
+	sort.Ints(lengths)
+	return productOfLast3(lengths)
+}
+
+func productOfLast3(lengths []int) int {
+	product := 1
+	for i := 1; i <= 3; i++ {
+		product *= lengths[len(lengths)-i]
+	}
+	return product
 }
 
 func findLowPoints(matrix [][]int) []Point {
