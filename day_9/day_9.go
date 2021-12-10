@@ -22,6 +22,11 @@ type Point struct {
 	y int
 }
 
+type ExplorationPoint struct {
+	point         Point
+	fullyExplored bool
+}
+
 func (p Point) ValueIn(matrix [][]int) int {
 	return matrix[p.x][p.y]
 }
@@ -49,6 +54,17 @@ func (p Point) FindAdjacents(matrix [][]int) []Point {
 	return adjacents
 }
 
+func (p Point) AlreadyIn(basin []ExplorationPoint) bool {
+	found := false
+	for _, b := range basin {
+		if b.point.x == p.x && b.point.y == p.y {
+			found = true
+			break
+		}
+	}
+	return found
+}
+
 func problem1() {
 	fmt.Printf("RiskLevel (test): %d\n", solveProblem1("day_9_test.input"))
 	fmt.Printf("RiskLevel (real): %d\n", solveProblem1("day_9.input"))
@@ -74,7 +90,9 @@ func solveProblem2(path string) int {
 	for _, startingPoint := range findLowPoints(matrix) {
 		basins = append(basins, maximizeBasin(startingPoint, matrix))
 	}
-	fmt.Println(basins)
+	for i, b := range basins {
+		fmt.Printf("Basin %d: %v (%d)\n", i, b, len(b))
+	}
 	return 1
 }
 
@@ -101,7 +119,47 @@ func findLowPoints(matrix [][]int) []Point {
 }
 
 func maximizeBasin(point Point, matrix [][]int) []Point {
-	return []Point{point}
+	basin := []ExplorationPoint{ExplorationPoint{point, false}}
+	for hasUnexploredPoints(basin) {
+		newPoints := []ExplorationPoint{}
+		for i, exploration := range basin {
+			if !exploration.fullyExplored {
+				// fmt.Printf("Exploring around %v\n", exploration)
+				for _, candidate := range exploration.point.FindAdjacents(matrix) {
+					if candidate.ValueIn(matrix) == 9 {
+						// fmt.Printf("  Candidate %v is out of the race because it's a 9\n", candidate)
+					} else if candidate.AlreadyIn(basin) || candidate.AlreadyIn(newPoints) {
+						// fmt.Printf("  Candidate %v is out of the race because it's already in there\n", candidate)
+					} else {
+						// fmt.Printf("  Adding %v\n", candidate)
+						newPoints = append(newPoints, ExplorationPoint{candidate, false})
+					}
+				}
+				basin[i].fullyExplored = true
+			}
+		}
+		basin = append(basin, newPoints...)
+	}
+	return extractPoints(basin)
+}
+
+func hasUnexploredPoints(basin []ExplorationPoint) bool {
+	result := false
+	for _, b := range basin {
+		if !b.fullyExplored {
+			result = true
+			break
+		}
+	}
+	return result
+}
+
+func extractPoints(basin []ExplorationPoint) []Point {
+	points := make([]Point, len(basin))
+	for i, ep := range basin {
+		points[i] = ep.point
+	}
+	return points
 }
 
 func readMatrix(path string) [][]int {
