@@ -26,6 +26,7 @@ func problem1() {
 
 func problem2() {
 	fmt.Printf("Complete (test): %d\n", solveProblem2("day_10_test.input"))
+	fmt.Printf("Complete (real): %d\n", solveProblem2("day_10.input"))
 }
 
 func solveProblem1(path string) int {
