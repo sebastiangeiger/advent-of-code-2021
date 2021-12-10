@@ -125,3 +125,23 @@ func TestPermutationsWith4(t *testing.T) {
 		t.Errorf("permutations was wrong, expected '%v' but got '%v'", want, result)
 	}
 }
+
+func TestPermutationsWith6(t *testing.T) {
+	result := permutations([]int{1, 2, 3, 4, 5, 6})
+	for i := 1; i < len(result); i++ {
+		if reflect.DeepEqual(result[i], result[i-1]) {
+			t.Errorf("Found the same value twice %v and %v", result[i], result[i-1])
+		}
+	}
+}
+
+func TestPermutationsWith7(t *testing.T) {
+	result := permutations([]int{1, 2, 3, 4, 5, 6, 7})
+	problemCount := 0
+	for i := 1; i < len(result); i++ {
+		if reflect.DeepEqual(result[i], result[i-1]) {
+			problemCount += 1
+		}
+	}
+	t.Errorf("Found the same value twice %d times", problemCount)
+}
