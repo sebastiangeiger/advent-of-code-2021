@@ -28,7 +28,7 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Day 9 - Problem 2")
+	fmt.Printf("Basins (test): %d\n", solveProblem2("day_9_test.input"))
 }
 
 func findLowPoints(matrix [][]int) []Point {
@@ -78,6 +78,21 @@ func solveProblem1(path string) int {
 	}
 
 	return sum
+}
+
+func solveProblem2(path string) int {
+	matrix := readMatrix(path)
+	basins := initializeBasins(matrix)
+	fmt.Println(basins)
+	return 1
+}
+
+func initializeBasins(matrix [][]int) [][]Point {
+	basins := [][]Point{}
+	for _, p := range findLowPoints(matrix) {
+		basins = append(basins, []Point{p})
+	}
+	return basins
 }
 
 func readMatrix(path string) [][]int {
