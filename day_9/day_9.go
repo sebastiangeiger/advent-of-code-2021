@@ -70,7 +70,10 @@ func solveProblem1(path string) int {
 
 func solveProblem2(path string) int {
 	matrix := readMatrix(path)
-	basins := initializeBasins(matrix)
+	basins := [][]Point{}
+	for _, startingPoint := range findLowPoints(matrix) {
+		basins = append(basins, maximizeBasin(startingPoint, matrix))
+	}
 	fmt.Println(basins)
 	return 1
 }
@@ -97,12 +100,8 @@ func findLowPoints(matrix [][]int) []Point {
 	return lowPoints
 }
 
-func initializeBasins(matrix [][]int) [][]Point {
-	basins := [][]Point{}
-	for _, p := range findLowPoints(matrix) {
-		basins = append(basins, []Point{p})
-	}
-	return basins
+func maximizeBasin(point Point, matrix [][]int) []Point {
+	return []Point{point}
 }
 
 func readMatrix(path string) [][]int {
