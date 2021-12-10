@@ -2,6 +2,7 @@ package day_10
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/sebastiangeiger/advent-of-code-2021/common"
@@ -24,7 +25,8 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Day 10 - Problem 2")
+	fmt.Printf("Complete (test): %d\n", solveProblem2("day_10_test.input"))
+	fmt.Printf("Complete (real): %d\n", solveProblem2("day_10.input"))
 }
 
 func solveProblem1(path string) int {
@@ -36,6 +38,26 @@ func solveProblem1(path string) int {
 	return sum
 }
 
+func solveProblem2(path string) int {
+	lines := common.ReadLinesFrom(path, false)
+	scores := []int{}
+	for _, line := range lines {
+		if syntaxCheck(line) == 0 {
+			scores = append(scores, complete(line))
+		}
+	}
+	sort.Ints(scores)
+	return median(scores)
+}
+
+func median(input []int) int {
+	if len(input)%2 == 1 {
+		return input[len(input)/2]
+	} else {
+		panic("Need odd input")
+	}
+}
+
 type OpenClose int64
 
 const (
@@ -44,26 +66,54 @@ const (
 )
 
 func syntaxCheck(line string) int {
-	// fmt.Printf("Syntax Check for '%s'\n", line)
 	stack := []string{}
 	for _, sym := range strings.Split(line, "") {
 		openClose := openClose(sym)
 		if openClose == Open {
 			stack = append(stack, sym)
-			// fmt.Printf("  '%s' was opening: '%s'\n", sym, strings.Join(stack, ""))
 		} else {
 			last := stack[len(stack)-1]
 			remainder := stack[0 : len(stack)-1]
 			if sym == matchingClose(last) {
 				stack = remainder
-				// fmt.Printf("  '%s' was closing: '%s' (deleted '%s')\n", sym, strings.Join(stack, ""), last)
 			} else {
-				// fmt.Printf("Found illegal '%s'\n", sym)
-				return score(sym)
+				return syntaxScore(sym)
 			}
 		}
 	}
 	return 0
+}
+
+func complete(line string) int {
+	remainder := stillOpen(line)
+	closed := make([]string, len(remainder))
+	for i, _ := range remainder {
+		closed[i] = matchingClose(remainder[len(remainder)-1-i])
+	}
+	score := 0
+	for _, sym := range closed {
+		score = score*5 + completeScore(sym)
+	}
+	return score
+}
+
+func stillOpen(line string) []string {
+	stack := []string{}
+	for _, sym := range strings.Split(line, "") {
+		openClose := openClose(sym)
+		if openClose == Open {
+			stack = append(stack, sym)
+		} else {
+			last := stack[len(stack)-1]
+			remainder := stack[0 : len(stack)-1]
+			if sym == matchingClose(last) {
+				stack = remainder
+			} else {
+				panic("This should not happen, please syntax check first!")
+			}
+		}
+	}
+	return stack
 }
 
 func openClose(symbol string) OpenClose {
@@ -90,7 +140,7 @@ func matchingClose(symbol string) string {
 	panic(fmt.Sprintf("Don't know about '%s'", symbol))
 }
 
-func score(symbol string) int {
+func syntaxScore(symbol string) int {
 	switch symbol {
 	case ")":
 		return 3
@@ -100,6 +150,20 @@ func score(symbol string) int {
 		return 1197
 	case ">":
 		return 25137
+	}
+	panic(fmt.Sprintf("Don't know about '%s'", symbol))
+}
+
+func completeScore(symbol string) int {
+	switch symbol {
+	case ")":
+		return 1
+	case "]":
+		return 2
+	case "}":
+		return 3
+	case ">":
+		return 4
 	}
 	panic(fmt.Sprintf("Don't know about '%s'", symbol))
 }
