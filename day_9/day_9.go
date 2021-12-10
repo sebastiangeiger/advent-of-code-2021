@@ -17,6 +17,11 @@ func Run(problem int) {
 	}
 }
 
+type Point struct {
+	x int
+	y int
+}
+
 func problem1() {
 	fmt.Printf("RiskLevel (test): %d\n", solveProblem1("day_9_test.input"))
 	fmt.Printf("RiskLevel (real): %d\n", solveProblem1("day_9.input"))
@@ -26,14 +31,13 @@ func problem2() {
 	fmt.Println("Day 9 - Problem 2")
 }
 
-func solveProblem1(path string) int {
-	matrix := readMatrix(path)
+func findLowPoints(matrix [][]int) []Point {
 	dx := len(matrix)
 	dy := len(matrix[0])
-	lowPoints := []int{}
+	lowPoints := []Point{}
 	for x := 0; x < dx; x++ {
 		for y := 0; y < dy; y++ {
-			current := matrix[x][y]
+			current := Point{x, y}
 			adjacents := []int{}
 			if y-1 >= 0 {
 				//left
@@ -53,7 +57,7 @@ func solveProblem1(path string) int {
 			}
 			isLow := true
 			for _, adjacent := range adjacents {
-				if current >= adjacent {
+				if matrix[current.x][current.y] >= adjacent {
 					isLow = false
 					break
 				}
@@ -63,9 +67,14 @@ func solveProblem1(path string) int {
 			}
 		}
 	}
+	return lowPoints
+}
+
+func solveProblem1(path string) int {
+	matrix := readMatrix(path)
 	sum := 0
-	for _, lowPoint := range lowPoints {
-		sum += (lowPoint + 1)
+	for _, p := range findLowPoints(matrix) {
+		sum += (matrix[p.x][p.y] + 1)
 	}
 
 	return sum
