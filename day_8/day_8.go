@@ -3,6 +3,7 @@ package day_8
 import (
 	"errors"
 	"fmt"
+	"math"
 	"sort"
 	"strings"
 
@@ -20,10 +21,40 @@ type DecodedObservation struct {
 }
 
 func (o Observation) Decode() DecodedObservation {
+	possibleMappings := allMappings([]string{"a", "b", "c", "d", "e", "f", "g"})
 	allDigits := append(o.signals, o.output...)
-	fmt.Printf("allDigits: %#v\n", allDigits)
-	fmt.Printf("mapping: %#v\n", findMapping(allDigits))
-	return DecodedObservation{[]int{}, []int{}}
+
+	viableMappings := []map[string]string{}
+	for _, mapping := range possibleMappings {
+		mappingIsViable := true
+		for _, digit := range allDigits {
+			applied := applyMapping(digit, mapping)
+			_, err := signalToInt(applied)
+			if err != nil {
+				mappingIsViable = false
+				break
+			}
+		}
+		if mappingIsViable {
+			viableMappings = append(viableMappings, mapping)
+		}
+	}
+	if len(viableMappings) == 1 {
+		viableMapping := viableMappings[0]
+		decodedSignals := make([]int, len(o.signals))
+		decodedOutput := make([]int, len(o.output))
+		for i, signal := range o.signals {
+			decoded, _ := signalToInt(applyMapping(signal, viableMapping))
+			decodedSignals[i] = decoded
+		}
+		for i, output := range o.output {
+			decoded, _ := signalToInt(applyMapping(output, viableMapping))
+			decodedOutput[i] = decoded
+		}
+		return DecodedObservation{decodedSignals, decodedOutput}
+	} else {
+		panic(fmt.Sprintf("Expected to find 1 viable mapping but got %d", len(viableMappings)))
+	}
 }
 
 func applyMapping(input string, mapping map[string]string) string {
@@ -35,14 +66,23 @@ func applyMapping(input string, mapping map[string]string) string {
 	return strings.Join(result, "")
 }
 
-func findMapping(digits []string) int {
-	for _, digit := range digits {
-		interpretations := interpretations(digit)
-		if len(interpretations) == 1 {
-			fmt.Printf("  %s = %d\n", digit, interpretations[0])
-		}
+func allMappings(elements []string) []map[string]string {
+	indexes := make([]int, len(elements))
+	for i := range indexes {
+		indexes[i] = i
 	}
-	return 1
+	permutations := permutations(indexes)
+	result := []map[string]string{}
+	for _, permutation := range permutations {
+		currentMap := map[string]string{}
+		for i, j := range permutation {
+			key := elements[i]
+			value := elements[j]
+			currentMap[key] = value
+		}
+		result = append(result, currentMap)
+	}
+	return result
 }
 
 func Run(problem int) {
@@ -134,6 +174,7 @@ func problem1() {
 
 func problem2() {
 	fmt.Printf("Decoded (test): %d\n", solveProblem2("day_8_test.input"))
+	fmt.Printf("Decoded (real): %d\n", solveProblem2("day_8.input"))
 }
 
 func solveProblem1(path string) int {
@@ -150,14 +191,24 @@ func solveProblem1(path string) int {
 	return sum
 }
 
+func toNumber(arr []int) int {
+	number := 0.0
+	for i, el := range arr {
+		number += float64(el) * math.Pow(10, float64(len(arr)-i-1))
+	}
+	return int(number)
+}
+
 func solveProblem2(path string) int {
 	observations := parseLines(common.ReadLinesFrom(path, false))
+	sum := 0
 	for _, observation := range observations {
-		// fmt.Printf("%#v -> %#v\n", observation.output, observation.Decode().output)
-		fmt.Printf("%#v -> %#v\n", observation.output, observation.Decode().output)
+		decoded := observation.Decode().output
+		sum += toNumber(decoded)
 	}
-	return 1
+	return sum
 }
+
 func parseLines(lines []string) []Observation {
 	observations := make([]Observation, len(lines))
 	for i, line := range lines {
