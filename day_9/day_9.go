@@ -73,6 +73,7 @@ func problem1() {
 
 func problem2() {
 	fmt.Printf("Basins (test): %d\n", solveProblem2("day_9_test.input"))
+	fmt.Printf("Basins (real): %d\n", solveProblem2("day_9.input"))
 }
 
 func solveProblem1(path string) int {
