@@ -20,6 +20,7 @@ func Run(problem int) {
 
 func problem1() {
 	fmt.Printf("Illegals (test): %d\n", solveProblem1("day_10_test.input"))
+	fmt.Printf("Illegals (real): %d\n", solveProblem1("day_10.input"))
 }
 
 func problem2() {
