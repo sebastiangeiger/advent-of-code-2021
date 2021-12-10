@@ -22,6 +22,33 @@ type Point struct {
 	y int
 }
 
+func (p Point) ValueIn(matrix [][]int) int {
+	return matrix[p.x][p.y]
+}
+
+func (p Point) FindAdjacents(matrix [][]int) []Point {
+	dx := len(matrix)
+	dy := len(matrix[0])
+	adjacents := []Point{}
+	if p.y-1 >= 0 {
+		//left
+		adjacents = append(adjacents, Point{p.x, p.y - 1})
+	}
+	if p.y+1 < dy {
+		//right
+		adjacents = append(adjacents, Point{p.x, p.y + 1})
+	}
+	if p.x-1 >= 0 {
+		//above
+		adjacents = append(adjacents, Point{p.x - 1, p.y})
+	}
+	if p.x+1 < dx {
+		//below
+		adjacents = append(adjacents, Point{p.x + 1, p.y})
+	}
+	return adjacents
+}
+
 func problem1() {
 	fmt.Printf("RiskLevel (test): %d\n", solveProblem1("day_9_test.input"))
 	fmt.Printf("RiskLevel (real): %d\n", solveProblem1("day_9.input"))
@@ -38,26 +65,9 @@ func findLowPoints(matrix [][]int) []Point {
 	for x := 0; x < dx; x++ {
 		for y := 0; y < dy; y++ {
 			current := Point{x, y}
-			adjacents := []int{}
-			if y-1 >= 0 {
-				//left
-				adjacents = append(adjacents, matrix[x][y-1])
-			}
-			if y+1 < dy {
-				//right
-				adjacents = append(adjacents, matrix[x][y+1])
-			}
-			if x-1 >= 0 {
-				//above
-				adjacents = append(adjacents, matrix[x-1][y])
-			}
-			if x+1 < dx {
-				//below
-				adjacents = append(adjacents, matrix[x+1][y])
-			}
 			isLow := true
-			for _, adjacent := range adjacents {
-				if matrix[current.x][current.y] >= adjacent {
+			for _, adjacent := range current.FindAdjacents(matrix) {
+				if current.ValueIn(matrix) >= adjacent.ValueIn(matrix) {
 					isLow = false
 					break
 				}
@@ -100,6 +110,11 @@ func readMatrix(path string) [][]int {
 	matrix := [][]int{}
 	for _, line := range lines {
 		matrix = append(matrix, common.ToIntLine(line, ""))
+	}
+	for i := 1; i < len(matrix); i++ {
+		if len(matrix[i]) != len(matrix[i-1]) {
+			panic("Matrix is irregular")
+		}
 	}
 	return matrix
 }
