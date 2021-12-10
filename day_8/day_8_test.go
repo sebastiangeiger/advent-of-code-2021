@@ -41,24 +41,6 @@ func TestApplyMappingForComplicated(t *testing.T) {
 	}
 }
 
-func TestLeftShiftBy0(t *testing.T) {
-	input := []int{1, 2, 3, 4}
-	want := []int{1, 2, 3, 4}
-	result := leftShift(input, 0)
-	if !reflect.DeepEqual(result, want) {
-		t.Errorf("leftShift was wrong, expected '%v' but got '%v'", want, result)
-	}
-}
-
-func TestLeftShiftBy2(t *testing.T) {
-	input := []int{1, 2, 3, 4}
-	want := []int{3, 4, 1, 2}
-	result := leftShift(input, 2)
-	if !reflect.DeepEqual(result, want) {
-		t.Errorf("leftShift was wrong, expected '%v' but got '%v'", want, result)
-	}
-}
-
 func TestPermutationsWith1(t *testing.T) {
 	want := [][]int{[]int{1}}
 	result := permutations([]int{1})
@@ -137,11 +119,9 @@ func TestPermutationsWith6(t *testing.T) {
 
 func TestPermutationsWith7(t *testing.T) {
 	result := permutations([]int{1, 2, 3, 4, 5, 6, 7})
-	problemCount := 0
 	for i := 1; i < len(result); i++ {
 		if reflect.DeepEqual(result[i], result[i-1]) {
-			problemCount += 1
+			t.Errorf("Found the same value twice %v and %v", result[i], result[i-1])
 		}
 	}
-	t.Errorf("Found the same value twice %d times", problemCount)
 }

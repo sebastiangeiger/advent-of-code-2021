@@ -17,32 +17,31 @@ func less(a []int, b []int) bool {
 	}
 }
 
-func permutations(input []int) [][]int {
-	result := permutationsHelper([]int{}, input)
-	sort.SliceStable(result, func(i, j int) bool { return less(result[i], result[j]) })
-	return result
-}
+func permutations(arr []int) [][]int {
+	var helper func([]int, int)
+	res := [][]int{}
 
-func permutationsHelper(currentPath []int, remainder []int) [][]int {
-	if len(remainder) == 0 {
-		return [][]int{currentPath}
-	} else {
-		paths := [][]int{}
-		for i := 0; i < len(remainder); i++ {
-			shifted := leftShift(remainder, i)
-			newPath := append(currentPath, shifted[0])
-			recursiveResults := permutationsHelper(newPath, shifted[1:])
-			paths = append(paths, recursiveResults...)
+	helper = func(arr []int, n int) {
+		if n == 1 {
+			tmp := make([]int, len(arr))
+			copy(tmp, arr)
+			res = append(res, tmp)
+		} else {
+			for i := 0; i < n; i++ {
+				helper(arr, n-1)
+				if n%2 == 1 {
+					tmp := arr[i]
+					arr[i] = arr[n-1]
+					arr[n-1] = tmp
+				} else {
+					tmp := arr[0]
+					arr[0] = arr[n-1]
+					arr[n-1] = tmp
+				}
+			}
 		}
-		return paths
 	}
-}
-
-func leftShift(arr []int, shiftAmount int) []int {
-	result := make([]int, len(arr))
-	for i := range arr {
-		shiftedIndex := (i + shiftAmount) % len(arr)
-		result[i] = arr[shiftedIndex]
-	}
-	return result
+	helper(arr, len(arr))
+	sort.SliceStable(res, func(i, j int) bool { return less(res[i], res[j]) })
+	return res
 }
