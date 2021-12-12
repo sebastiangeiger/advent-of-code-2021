@@ -23,7 +23,8 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Day 11 - Problem 2")
+	fmt.Printf("All flash in step (test): %d\n", solveProblem2("day_11_test.input"))
+	fmt.Printf("All flash in step (real): %d\n", solveProblem2("day_11.input"))
 }
 
 func solveProblem1(path string) int {
@@ -33,6 +34,29 @@ func solveProblem1(path string) int {
 		flashes += step(population)
 	}
 	return flashes
+}
+
+func solveProblem2(path string) int {
+	population := read(path)
+	i := 0
+	for {
+		i++
+		step(population)
+		if allFlash(population) {
+			break
+		}
+	}
+	return i
+}
+
+func allFlash(population [][]int) bool {
+	sum := 0
+	for _, row := range population {
+		for _, individual := range row {
+			sum += individual
+		}
+	}
+	return sum == 0
 }
 
 func read(path string) [][]int {
