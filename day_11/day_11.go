@@ -18,9 +18,88 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Println("Day 11 - Problem 1")
+	fmt.Printf("Number of flashes (test): %d\n", solveProblem1("day_11_test.input"))
+	fmt.Printf("Number of flashes (real): %d\n", solveProblem1("day_11.input"))
 }
 
 func problem2() {
 	fmt.Println("Day 11 - Problem 2")
+}
+
+func solveProblem1(path string) int {
+	population := read(path)
+	flashes := 0
+	for i := 0; i < 100; i++ {
+		flashes += step(population)
+	}
+	return flashes
+}
+
+func read(path string) [][]int {
+	result := [][]int{}
+	for _, line := range common.ReadLinesFrom(path, false) {
+		result = append(result, common.ToIntLine(line, ""))
+	}
+	return result
+}
+
+func step(population [][]int) int {
+	increment(population)
+	return flashes(population)
+}
+
+func print(population [][]int) {
+	for _, row := range population {
+		for _, individual := range row {
+			fmt.Printf("%d", individual)
+		}
+		fmt.Printf("\n")
+	}
+	fmt.Println("")
+}
+
+func increment(population [][]int) {
+	for i, row := range population {
+		for j := range row {
+			population[i][j] += 1
+		}
+	}
+}
+
+func flashes(population [][]int) int {
+	result := 0
+	for {
+		incremented := false
+		for x, row := range population {
+			for y, energyLevel := range row {
+				if energyLevel > 9 {
+					result++
+					incremented = true
+					incrementNeighbors(population, x, y)
+					population[x][y] = 0
+				}
+			}
+		}
+		if !incremented {
+			break
+		}
+	}
+	return result
+}
+
+func incrementNeighbors(population [][]int, x int, y int) {
+	dx := len(population)
+	dy := len(population[0])
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			original := (i == 0 && j == 0)
+			inBounds := x+i >= 0 && x+i < dx && y+j >= 0 && y+j < dy
+			if !original && inBounds {
+				currentValue := population[x+i][y+j]
+				if currentValue > 0 && currentValue <= 10 {
+					population[x+i][y+j] += 1
+				}
+			}
+		}
+	}
 }
