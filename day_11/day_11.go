@@ -40,10 +40,16 @@ func read(path string) [][]int {
 }
 
 func step(population [][]int) {
-	newPopulation := copyPopulation(population)
-	increment(newPopulation)
+	fmt.Println("Original Population")
 	print(population)
-	print(newPopulation)
+	increment(population)
+	flashes(population)
+	fmt.Println("After Round 1")
+	print(population)
+	increment(population)
+	flashes(population)
+	fmt.Println("After Round 2")
+	print(population)
 }
 
 func print(population [][]int) {
@@ -60,6 +66,41 @@ func increment(population [][]int) {
 	for i, row := range population {
 		for j := range row {
 			population[i][j] += 1
+		}
+	}
+}
+
+func flashes(population [][]int) {
+	for {
+		incremented := false
+		for x, row := range population {
+			for y, energyLevel := range row {
+				if energyLevel > 9 {
+					incremented = true
+					incrementNeighbors(population, x, y)
+					population[x][y] = 0
+				}
+			}
+		}
+		if !incremented {
+			break
+		}
+	}
+}
+
+func incrementNeighbors(population [][]int, x int, y int) {
+	dx := len(population)
+	dy := len(population[0])
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			original := (i == 0 && j == 0)
+			inBounds := x+i >= 0 && x+i < dx && y+j >= 0 && y+j < dy
+			if !original && inBounds {
+				currentValue := population[x+i][y+j]
+				if currentValue > 0 && currentValue <= 10 {
+					population[x+i][y+j] += 1
+				}
+			}
 		}
 	}
 }
