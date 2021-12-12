@@ -27,8 +27,11 @@ func problem2() {
 
 func solveProblem1(path string) int {
 	population := read(path)
-	step(population)
-	return 1
+	flashes := 0
+	for i := 0; i < 100; i++ {
+		flashes += step(population)
+	}
+	return flashes
 }
 
 func read(path string) [][]int {
@@ -39,17 +42,9 @@ func read(path string) [][]int {
 	return result
 }
 
-func step(population [][]int) {
-	fmt.Println("Original Population")
-	print(population)
+func step(population [][]int) int {
 	increment(population)
-	flashes(population)
-	fmt.Println("After Round 1")
-	print(population)
-	increment(population)
-	flashes(population)
-	fmt.Println("After Round 2")
-	print(population)
+	return flashes(population)
 }
 
 func print(population [][]int) {
@@ -70,12 +65,14 @@ func increment(population [][]int) {
 	}
 }
 
-func flashes(population [][]int) {
+func flashes(population [][]int) int {
+	result := 0
 	for {
 		incremented := false
 		for x, row := range population {
 			for y, energyLevel := range row {
 				if energyLevel > 9 {
+					result++
 					incremented = true
 					incrementNeighbors(population, x, y)
 					population[x][y] = 0
@@ -86,6 +83,7 @@ func flashes(population [][]int) {
 			break
 		}
 	}
+	return result
 }
 
 func incrementNeighbors(population [][]int, x int, y int) {
@@ -103,14 +101,4 @@ func incrementNeighbors(population [][]int, x int, y int) {
 			}
 		}
 	}
-}
-
-func copyPopulation(population [][]int) [][]int {
-	newPopulation := common.InitializeArray(len(population), len(population[0]))
-	for i, row := range population {
-		for j := range row {
-			newPopulation[i][j] += population[i][j]
-		}
-	}
-	return newPopulation
 }
