@@ -18,7 +18,8 @@ func Run(problem int) {
 }
 
 func problem1() {
-	fmt.Printf("Problem 1: %d", solveProblem1("day_11_test.input"))
+	fmt.Printf("Number of flashes (test): %d\n", solveProblem1("day_11_test.input"))
+	fmt.Printf("Number of flashes (real): %d\n", solveProblem1("day_11.input"))
 }
 
 func problem2() {
