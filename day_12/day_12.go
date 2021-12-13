@@ -40,22 +40,30 @@ func problem1() {
 }
 
 func problem2() {
-	fmt.Println("Day 12 - Problem 1")
+	fmt.Printf("Number of paths (with revisit) (test 1): %d\n", solveProblem2("day_12_test.input"))
 }
 
-func solveProblem1(path string) int {
+func solveProblem(path string, allowRevisit bool) int {
 	edges := read(path)
 	neighbors := makeNeighbors(edges)
 	paths := [][]Node{[]Node{Node{"start"}}}
 	i := 0
 	for {
 		i++
-		paths = expand(paths, neighbors)
+		paths = expand(paths, neighbors, allowRevisit)
 		if allDone(paths) {
 			break
 		}
 	}
 	return len(paths)
+
+}
+func solveProblem1(path string) int {
+	return solveProblem(path, false)
+}
+
+func solveProblem2(path string) int {
+	return solveProblem(path, true)
 }
 
 func printPaths(paths [][]Node) {
@@ -91,7 +99,7 @@ func allDone(paths [][]Node) bool {
 	return done
 }
 
-func expand(paths [][]Node, neighbors map[Node][]Node) [][]Node {
+func expand(paths [][]Node, neighbors map[Node][]Node, allowRevisit bool) [][]Node {
 	result := [][]Node{}
 	for _, path := range paths {
 		last := path[len(path)-1]
@@ -100,20 +108,21 @@ func expand(paths [][]Node, neighbors map[Node][]Node) [][]Node {
 		} else {
 			for _, neighbor := range neighbors[last] {
 				if neighbor.CanBeRevisited() {
-					newPath := make([]Node, len(path)+1)
-					copy(newPath, path)
-					newPath[len(path)] = neighbor
-					result = append(result, newPath)
+					result = append(result, addNode(path, neighbor))
 				} else if !includes(path, neighbor) {
-					newPath := make([]Node, len(path)+1)
-					copy(newPath, path)
-					newPath[len(path)] = neighbor
-					result = append(result, newPath)
+					result = append(result, addNode(path, neighbor))
 				}
 			}
 		}
 	}
 	return result
+}
+
+func addNode(path []Node, node Node) []Node {
+	newPath := make([]Node, len(path)+1)
+	copy(newPath, path)
+	newPath[len(path)] = node
+	return newPath
 }
 
 func includes(path []Node, node Node) bool {
