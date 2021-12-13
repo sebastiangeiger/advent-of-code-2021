@@ -33,7 +33,10 @@ type Edge struct {
 }
 
 func problem1() {
-	fmt.Printf("Number of paths (test): %d\n", solveProblem1("day_12_test.input"))
+	fmt.Printf("Number of paths (test 1): %d\n", solveProblem1("day_12_test.input"))
+	fmt.Printf("Number of paths (test 2): %d\n", solveProblem1("day_12_test_2.input"))
+	fmt.Printf("Number of paths (test 3): %d\n", solveProblem1("day_12_test_3.input"))
+	fmt.Printf("Number of paths (real): %d\n", solveProblem1("day_12.input"))
 }
 
 func problem2() {
@@ -43,16 +46,11 @@ func problem2() {
 func solveProblem1(path string) int {
 	edges := read(path)
 	neighbors := makeNeighbors(edges)
-	printNeighbors(neighbors)
 	paths := [][]Node{[]Node{Node{"start"}}}
-	fmt.Println("Initial")
-	printPaths(paths)
 	i := 0
 	for {
 		i++
 		paths = expand(paths, neighbors)
-		fmt.Printf("Expansion %d\n", i+1)
-		printPaths(paths)
 		if allDone(paths) {
 			break
 		}
