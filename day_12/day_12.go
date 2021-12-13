@@ -27,23 +27,32 @@ func (node Node) CanBeRevisited() bool {
 	return firstLetter == strings.ToUpper(firstLetter)
 }
 
+func (node Node) CanBeRevisitedOnce() bool {
+	firstLetter := node.name[0:1]
+	lowerCase := (firstLetter != strings.ToUpper(firstLetter))
+	return node.name != "start" && node.name != "end" && lowerCase
+}
+
 type Edge struct {
 	start Node
 	end   Node
 }
 
 func problem1() {
-	fmt.Printf("Number of paths (test 1): %d\n", solveProblem1("day_12_test.input"))
-	fmt.Printf("Number of paths (test 2): %d\n", solveProblem1("day_12_test_2.input"))
-	fmt.Printf("Number of paths (test 3): %d\n", solveProblem1("day_12_test_3.input"))
-	fmt.Printf("Number of paths (real): %d\n", solveProblem1("day_12.input"))
+	fmt.Printf("Number of paths (test 1): %d\n", solveProblem1("day_12_test.input", false))
+	fmt.Printf("Number of paths (test 2): %d\n", solveProblem1("day_12_test_2.input", false))
+	fmt.Printf("Number of paths (test 3): %d\n", solveProblem1("day_12_test_3.input", false))
+	fmt.Printf("Number of paths (real): %d\n", solveProblem1("day_12.input", false))
 }
 
 func problem2() {
-	fmt.Printf("Number of paths (with revisit) (test 1): %d\n", solveProblem2("day_12_test.input"))
+	fmt.Printf("Number of paths (test 1): %d\n", solveProblem2("day_12_test.input", false))
+	fmt.Printf("Number of paths (test 2): %d\n", solveProblem2("day_12_test_2.input", false))
+	fmt.Printf("Number of paths (test 3): %d\n", solveProblem2("day_12_test_3.input", false))
+	fmt.Printf("Number of paths (real): %d\n", solveProblem2("day_12.input", false))
 }
 
-func solveProblem(path string, allowRevisit bool) int {
+func solveProblem(path string, allowRevisit bool, debug bool) int {
 	edges := read(path)
 	neighbors := makeNeighbors(edges)
 	paths := [][]Node{[]Node{Node{"start"}}}
@@ -51,19 +60,27 @@ func solveProblem(path string, allowRevisit bool) int {
 	for {
 		i++
 		paths = expand(paths, neighbors, allowRevisit)
+		if debug {
+			fmt.Printf("Expansion %d\n", i)
+			printPaths(paths)
+		}
 		if allDone(paths) {
+			break
+		}
+		if debug && i > 100 {
+			fmt.Println("Breaking because I'm stuck!")
 			break
 		}
 	}
 	return len(paths)
 
 }
-func solveProblem1(path string) int {
-	return solveProblem(path, false)
+func solveProblem1(path string, debug bool) int {
+	return solveProblem(path, false, debug)
 }
 
-func solveProblem2(path string) int {
-	return solveProblem(path, true)
+func solveProblem2(path string, debug bool) int {
+	return solveProblem(path, true, debug)
 }
 
 func printPaths(paths [][]Node) {
@@ -111,6 +128,8 @@ func expand(paths [][]Node, neighbors map[Node][]Node, allowRevisit bool) [][]No
 					result = append(result, addNode(path, neighbor))
 				} else if !includes(path, neighbor) {
 					result = append(result, addNode(path, neighbor))
+				} else if allowRevisit && neighbor.CanBeRevisitedOnce() && !hasRevisit(path) {
+					result = append(result, addNode(path, neighbor))
 				}
 			}
 		}
@@ -134,6 +153,28 @@ func includes(path []Node, node Node) bool {
 		}
 	}
 	return found
+}
+
+func hasRevisit(path []Node) bool {
+	result := false
+	cache := make(map[string]bool)
+	// fmt.Printf("hasRevist(%v):\n", path)
+	for _, node := range path {
+		// fmt.Printf("  %s:", node.name)
+		if node.CanBeRevisitedOnce() {
+			_, ok := cache[node.name]
+			if ok {
+				result = true
+				// fmt.Printf("Found a revisit in %v\n", path)
+				break
+			} else {
+				cache[node.name] = true
+			}
+		}
+		// fmt.Printf("%v", cache)
+		// fmt.Printf("\n")
+	}
+	return result
 }
 
 func makeNeighbors(edges []Edge) map[Node][]Node {
