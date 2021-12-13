@@ -37,8 +37,37 @@ func problem2() {
 
 func solveProblem1(path string) int {
 	edges := read(path)
-	fmt.Printf("%#v\n", edges)
+	neighbors := makeNeighbors(edges)
+	printNeighbors(neighbors)
 	return 1
+}
+
+func printNeighbors(neighbors map[Node][]Node) {
+	for key, values := range neighbors {
+		names := make([]string, len(values))
+		for i, value := range values {
+			names[i] = value.name
+		}
+		fmt.Printf("%s -> %s\n", key.name, strings.Join(names, ","))
+	}
+}
+
+func makeNeighbors(edges []Edge) map[Node][]Node {
+	neighbors := make(map[Node][]Node)
+	for _, edge := range edges {
+		addNeighbor(neighbors, edge.start, edge.end)
+		addNeighbor(neighbors, edge.end, edge.start)
+	}
+	return neighbors
+}
+
+func addNeighbor(neighbors map[Node][]Node, key Node, value Node) {
+	values, ok := neighbors[key]
+	if ok {
+		neighbors[key] = append(values, value)
+	} else {
+		neighbors[key] = []Node{value}
+	}
 }
 
 func read(path string) []Edge {
