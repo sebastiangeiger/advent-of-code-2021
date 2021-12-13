@@ -39,7 +39,21 @@ func solveProblem1(path string) int {
 	edges := read(path)
 	neighbors := makeNeighbors(edges)
 	printNeighbors(neighbors)
+	paths := [][]Node{[]Node{Node{"start"}}}
+	printPaths(paths)
 	return 1
+}
+
+func printPaths(paths [][]Node) {
+	fmt.Printf("%d paths\n", len(paths))
+	for i, path := range paths {
+		fmt.Printf("%3d: ", i)
+		nodeNames := make([]string, len(path))
+		for j, node := range path {
+			nodeNames[j] = node.name
+		}
+		fmt.Printf("%s\n", strings.Join(nodeNames, ","))
+	}
 }
 
 func printNeighbors(neighbors map[Node][]Node) {
