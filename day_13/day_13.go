@@ -29,9 +29,10 @@ func problem1() {
 }
 
 func solveProblem1(path string) {
-	paper, foldInstructions := read(path)
-	fmt.Printf("Paper: %#v\n", paper)
-	fmt.Printf("FoldInstructions: %#v\n", foldInstructions)
+	coordinates, foldInstructions := read(path)
+	paper := makePaper(coordinates)
+	printPaper(paper)
+	fmt.Printf("foldInstructions: %v\n", foldInstructions)
 }
 
 func problem2() {
@@ -61,4 +62,33 @@ func read(path string) ([][]int, []FoldInstruction) {
 		}
 	}
 	return coordinates, foldInstructions
+}
+
+func makePaper(coordinates [][]int) [][]bool {
+	maxX := 0
+	maxY := 0
+	for _, coordinate := range coordinates {
+		maxX = common.Max(maxX, coordinate[0])
+		maxY = common.Max(maxY, coordinate[1])
+	}
+	result := common.InitializeBoolArray(maxY+1, maxX+1)
+	for _, coordinate := range coordinates {
+		x := coordinate[0]
+		y := coordinate[1]
+		result[y][x] = true
+	}
+	return result
+}
+
+func printPaper(paper [][]bool) {
+	for _, line := range paper {
+		for _, cell := range line {
+			if cell {
+				fmt.Printf("#")
+			} else {
+				fmt.Printf(".")
+			}
+		}
+		fmt.Printf("\n")
+	}
 }
