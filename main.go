@@ -12,6 +12,7 @@ import (
 	"github.com/sebastiangeiger/advent-of-code-2021/day_12"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_13"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_2"
+	"github.com/sebastiangeiger/advent-of-code-2021/day_22"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_3"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_4"
 	"github.com/sebastiangeiger/advent-of-code-2021/day_5"
@@ -73,6 +74,8 @@ func runDayProblem(day int, problem int) {
 		day_12.Run(problem)
 	case 13:
 		day_13.Run(problem)
+	case 22:
+		day_22.Run(problem)
 	default:
 		common.PrintNotImplemented(day, problem)
 	}
