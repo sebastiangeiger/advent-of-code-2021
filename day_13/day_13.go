@@ -33,7 +33,10 @@ func solveProblem1(path string) {
 	paper := makePaper(coordinates)
 	printPaper(paper)
 	fmt.Printf("foldInstructions: %v\n", foldInstructions)
-	printPaper(fold(paper, foldInstructions[0]))
+	oneFold := fold(paper, foldInstructions[0])
+	printPaper(oneFold)
+	twoFold := fold(oneFold, foldInstructions[1])
+	printPaper(twoFold)
 }
 
 func problem2() {
@@ -50,6 +53,18 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 			for x := range row {
 				mirrorY := 2*len(newPaper) - y
 				newPaper[y][x] = paper[y][x] || paper[mirrorY][x]
+			}
+		}
+		return newPaper
+	} else if instruction.axis == "x" {
+		if len(paper[0])/2 != instruction.coordinate {
+			panic("Folds don't agree")
+		}
+		newPaper := common.InitializeBoolArray(len(paper), len(paper[0])/2)
+		for y, row := range newPaper {
+			for x := range row {
+				mirrorX := 2*len(row) - x
+				newPaper[y][x] = paper[y][x] || paper[y][mirrorX]
 			}
 		}
 		return newPaper
