@@ -25,7 +25,7 @@ type FoldInstruction struct {
 }
 
 func problem1() {
-	fmt.Printf("Number of dots after 1 fold (test): %d\n", solveProblem1("day_13_test.input", true))
+	fmt.Printf("Number of dots after 1 fold (test): %d\n", solveProblem1("day_13_test.input", false))
 	fmt.Printf("Number of dots after 1 fold (real): %d\n", solveProblem1("day_13.input", false))
 }
 
