@@ -29,6 +29,10 @@ func problem1() {
 	fmt.Printf("Number of dots after 1 fold (real): %d\n", solveProblem1("day_13.input", true))
 }
 
+func problem2() {
+	solveProblem2("day_13.input")
+}
+
 func solveProblem1(path string, debug bool) int {
 	coordinates, foldInstructions := read(path)
 	paper := makePaper(coordinates)
@@ -43,8 +47,13 @@ func solveProblem1(path string, debug bool) int {
 	return countDots(oneFold)
 }
 
-func problem2() {
-	fmt.Println("Day 13 - Problem 2")
+func solveProblem2(path string) {
+	coordinates, foldInstructions := read(path)
+	paper := makePaper(coordinates)
+	for _, foldInstruction := range foldInstructions {
+		paper = fold(paper, foldInstruction)
+	}
+	printPaper(paper)
 }
 
 func countDots(paper [][]bool) int {
@@ -61,6 +70,7 @@ func countDots(paper [][]bool) int {
 
 func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 	if instruction.axis == "y" {
+		fmt.Printf("folding along y = %d, len(paper)/2=%d, len(paper)=%d\n", instruction.coordinate, len(paper)/2, len(paper))
 		if len(paper)/2 != instruction.coordinate {
 			panic("Folds don't agree")
 		}
@@ -73,10 +83,10 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 		}
 		return newPaper
 	} else if instruction.axis == "x" {
+		fmt.Printf("folding along x = %d, len(paper[0])/2=%d, len(paper[0])=%d\n", instruction.coordinate, len(paper[0])/2, len(paper[0]))
 		if len(paper[0])/2 != instruction.coordinate {
 			panic("Folds don't agree")
 		}
-		fmt.Printf("folding along x = %d, len(paper[0])/2=%d, len(paper[0])=%d\n", instruction.coordinate, len(paper[0])/2, len(paper[0]))
 		newPaper := common.InitializeBoolArray(len(paper), len(paper[0])/2)
 		for y, row := range newPaper {
 			for x := range row {
