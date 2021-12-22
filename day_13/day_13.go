@@ -26,7 +26,7 @@ type FoldInstruction struct {
 
 func problem1() {
 	fmt.Printf("Number of dots after 1 fold (test): %d\n", solveProblem1("day_13_test.input", true))
-	fmt.Printf("Number of dots after 1 fold (real): %d\n", solveProblem1("day_13.input", true))
+	fmt.Printf("Number of dots after 1 fold (real): %d\n", solveProblem1("day_13.input", false))
 }
 
 func problem2() {
@@ -43,6 +43,8 @@ func solveProblem1(path string, debug bool) int {
 	oneFold := fold(paper, foldInstructions[0])
 	if debug {
 		printPaper(oneFold)
+		twoFold := fold(oneFold, foldInstructions[1])
+		printPaper(twoFold)
 	}
 	return countDots(oneFold)
 }
@@ -70,28 +72,44 @@ func countDots(paper [][]bool) int {
 
 func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 	if instruction.axis == "y" {
-		fmt.Printf("folding along y = %d, len(paper)/2=%d, len(paper)=%d\n", instruction.coordinate, len(paper)/2, len(paper))
-		if len(paper)/2 != instruction.coordinate {
-			panic("Folds don't agree")
+		leftMin := 0
+		leftMax := instruction.coordinate - 1
+		rightMin := instruction.coordinate + 1
+		rightMax := len(paper) - 1
+		fmt.Printf("folding along y = %d, len(paper)=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
+		if leftMax-leftMin < rightMax-rightMin {
+			panic("Didn't expect the bottom to be bigger")
 		}
-		newPaper := common.InitializeBoolArray(len(paper)/2, len(paper[0]))
+		newPaper := common.InitializeBoolArray(instruction.coordinate, len(paper[0]))
 		for y, row := range newPaper {
 			for x := range row {
-				mirrorY := len(paper) - 1 - y
-				newPaper[y][x] = paper[y][x] || paper[mirrorY][x]
+				mirrorY := instruction.coordinate*2 - y
+				if mirrorY < len(paper) {
+					newPaper[y][x] = paper[y][x] || paper[mirrorY][x]
+				} else {
+					newPaper[y][x] = paper[y][x]
+				}
 			}
 		}
 		return newPaper
 	} else if instruction.axis == "x" {
-		fmt.Printf("folding along x = %d, len(paper[0])/2=%d, len(paper[0])=%d\n", instruction.coordinate, len(paper[0])/2, len(paper[0]))
-		if len(paper[0])/2 != instruction.coordinate {
-			panic("Folds don't agree")
+		leftMin := 0
+		leftMax := instruction.coordinate - 1
+		rightMin := instruction.coordinate + 1
+		rightMax := len(paper[0]) - 1
+		fmt.Printf("folding along x = %d, len(paper[0])=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper[0]), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
+		if leftMax-leftMin < rightMax-rightMin {
+			panic("Didn't expect the right to be bigger")
 		}
-		newPaper := common.InitializeBoolArray(len(paper), len(paper[0])/2)
+		newPaper := common.InitializeBoolArray(len(paper), instruction.coordinate)
 		for y, row := range newPaper {
 			for x := range row {
-				mirrorX := len(paper[0]) - 1 - x
-				newPaper[y][x] = paper[y][x] || paper[y][mirrorX]
+				mirrorX := instruction.coordinate*2 - x
+				if mirrorX < len(paper[0]) {
+					newPaper[y][x] = paper[y][x] || paper[y][mirrorX]
+				} else {
+					newPaper[y][x] = paper[y][x]
+				}
 			}
 		}
 		return newPaper
@@ -133,15 +151,7 @@ func makePaper(coordinates [][]int) [][]bool {
 		maxX = common.Max(maxX, coordinate[0])
 		maxY = common.Max(maxY, coordinate[1])
 	}
-	lenX := maxX + 1
-	lenY := maxY + 1
-	if common.IsEven(lenX) {
-		lenX += 1
-	}
-	if common.IsEven(lenY) {
-		lenY += 1
-	}
-	result := common.InitializeBoolArray(lenY, lenX)
+	result := common.InitializeBoolArray(maxY+1, maxX+1)
 	for _, coordinate := range coordinates {
 		x := coordinate[0]
 		y := coordinate[1]
