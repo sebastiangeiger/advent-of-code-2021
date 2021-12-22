@@ -25,22 +25,38 @@ type FoldInstruction struct {
 }
 
 func problem1() {
-	solveProblem1("day_13_test.input")
+	fmt.Printf("Number of dots after 1 fold (test): %d\n", solveProblem1("day_13_test.input", true))
+	fmt.Printf("Number of dots after 1 fold (real): %d\n", solveProblem1("day_13.input", true))
 }
 
-func solveProblem1(path string) {
+func solveProblem1(path string, debug bool) int {
 	coordinates, foldInstructions := read(path)
 	paper := makePaper(coordinates)
-	printPaper(paper)
-	fmt.Printf("foldInstructions: %v\n", foldInstructions)
+	if debug {
+		printPaper(paper)
+		fmt.Printf("foldInstructions: %v\n", foldInstructions)
+	}
 	oneFold := fold(paper, foldInstructions[0])
-	printPaper(oneFold)
-	twoFold := fold(oneFold, foldInstructions[1])
-	printPaper(twoFold)
+	if debug {
+		printPaper(oneFold)
+	}
+	return countDots(oneFold)
 }
 
 func problem2() {
 	fmt.Println("Day 13 - Problem 2")
+}
+
+func countDots(paper [][]bool) int {
+	sum := 0
+	for _, row := range paper {
+		for _, cell := range row {
+			if cell {
+				sum++
+			}
+		}
+	}
+	return sum
 }
 
 func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
@@ -51,7 +67,7 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 		newPaper := common.InitializeBoolArray(len(paper)/2, len(paper[0]))
 		for y, row := range newPaper {
 			for x := range row {
-				mirrorY := 2*len(newPaper) - y
+				mirrorY := len(paper) - 1 - y
 				newPaper[y][x] = paper[y][x] || paper[mirrorY][x]
 			}
 		}
@@ -60,10 +76,11 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 		if len(paper[0])/2 != instruction.coordinate {
 			panic("Folds don't agree")
 		}
+		fmt.Printf("folding along x = %d, len(paper[0])/2=%d, len(paper[0])=%d\n", instruction.coordinate, len(paper[0])/2, len(paper[0]))
 		newPaper := common.InitializeBoolArray(len(paper), len(paper[0])/2)
 		for y, row := range newPaper {
 			for x := range row {
-				mirrorX := 2*len(row) - x
+				mirrorX := len(paper[0]) - 1 - x
 				newPaper[y][x] = paper[y][x] || paper[y][mirrorX]
 			}
 		}
@@ -106,7 +123,15 @@ func makePaper(coordinates [][]int) [][]bool {
 		maxX = common.Max(maxX, coordinate[0])
 		maxY = common.Max(maxY, coordinate[1])
 	}
-	result := common.InitializeBoolArray(maxY+1, maxX+1)
+	lenX := maxX + 1
+	lenY := maxY + 1
+	if common.IsEven(lenX) {
+		lenX += 1
+	}
+	if common.IsEven(lenY) {
+		lenY += 1
+	}
+	result := common.InitializeBoolArray(lenY, lenX)
 	for _, coordinate := range coordinates {
 		x := coordinate[0]
 		y := coordinate[1]
@@ -116,14 +141,17 @@ func makePaper(coordinates [][]int) [][]bool {
 }
 
 func printPaper(paper [][]bool) {
-	for _, line := range paper {
-		for _, cell := range line {
-			if cell {
-				fmt.Printf("#")
-			} else {
-				fmt.Printf(".")
+	fmt.Printf("y=%d - x=%d\n", len(paper), len(paper[0]))
+	if len(paper) < 50 {
+		for _, line := range paper {
+			for _, cell := range line {
+				if cell {
+					fmt.Printf("#")
+				} else {
+					fmt.Printf(".")
+				}
 			}
+			fmt.Printf("\n")
 		}
-		fmt.Printf("\n")
 	}
 }
