@@ -91,3 +91,7 @@ func ToIntLine(line string, separator string) []int {
 	}
 	return result
 }
+
+func IsEven(i int) bool {
+	return i%2 == 0
+}
