@@ -76,7 +76,7 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 		leftMax := instruction.coordinate - 1
 		rightMin := instruction.coordinate + 1
 		rightMax := len(paper) - 1
-		fmt.Printf("folding along y = %d, len(paper)=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
+		// fmt.Printf("folding along y = %d, len(paper)=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
 		if leftMax-leftMin < rightMax-rightMin {
 			panic("Didn't expect the bottom to be bigger")
 		}
@@ -97,7 +97,7 @@ func fold(paper [][]bool, instruction FoldInstruction) [][]bool {
 		leftMax := instruction.coordinate - 1
 		rightMin := instruction.coordinate + 1
 		rightMax := len(paper[0]) - 1
-		fmt.Printf("folding along x = %d, len(paper[0])=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper[0]), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
+		// fmt.Printf("folding along x = %d, len(paper[0])=%d, %d...<%d>...%d | %d...<%d>...%d\n", instruction.coordinate, len(paper[0]), leftMin, leftMax-leftMin, leftMax, rightMin, rightMax-rightMin, rightMax)
 		if leftMax-leftMin < rightMax-rightMin {
 			panic("Didn't expect the right to be bigger")
 		}
@@ -161,7 +161,7 @@ func makePaper(coordinates [][]int) [][]bool {
 }
 
 func printPaper(paper [][]bool) {
-	fmt.Printf("y=%d - x=%d\n", len(paper), len(paper[0]))
+	// fmt.Printf("y=%d - x=%d\n", len(paper), len(paper[0]))
 	if len(paper) < 50 {
 		for _, line := range paper {
 			for _, cell := range line {
